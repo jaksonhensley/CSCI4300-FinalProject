@@ -5,9 +5,9 @@
 
 ### Creators:
 
-John Lavender
-Jackson Henley
-Jacob Kossler
+- John Lavender
+- Jackson Henley
+- Jacob Kossler
 
 ---
 
