@@ -1,0 +1,22 @@
+.about-container {
+  padding-top: 50px;
+  margin: auto;
+  width: 800px;
+  background-color: white;
+}
+
+.team-list-container {
+  justify-content: left;
+  padding-left: 20px;
+}
+
+.team-list {
+  padding-left: 40px;
+  display: inline-block; 
+	text-align: left;   
+}
+
+.github-link {
+  font-weight: bold;
+  font-size: xx-large;
+}

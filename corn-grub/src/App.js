@@ -8,17 +8,17 @@ import {
 
 import NavBar from "./shared/components/nav/NavBar";
 import Home from "./pages/Home";
-import About from "./pages/About";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import About from "./pages/about/About";
 import Account from "./pages/Account";
-import RequestResetPass from "./pages/RequestResetPass";
+import Auth from "./pages/auth/Auth";
 import ConfirmResetPass from "./pages/ConfirmResetPass";
 import Item from "./pages/Item";
 import Cart from "./pages/Cart";
 import Message from "./pages/Message";
-import AuthContext from "./shared/context/AuthContext";
 import Header from "./shared/components/header/Header";
+
+import { SIGNIN, REGISTER, CHANGEPASS } from "./pages/auth/AuthMode";
+import AuthContext from "./shared/context/AuthContext";
 
 /*
 
@@ -59,7 +59,7 @@ import Header from "./shared/components/header/Header";
 */
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const doLogin = useCallback(() => {
     setIsLoggedIn(true);
@@ -73,17 +73,17 @@ const App = () => {
 
   routes = (
     <Routes>
-      <Route path="/" element={<Home/>}/>
-      <Route path="/about" element={<About/>}/>
-      <Route path="/login" element={<Login/>}/>
-      <Route path="/register" element={<Register/>}/>
-      <Route path="/account" element={<Account/>}/>
-      <Route path="/request-reset-pass" element={<RequestResetPass/>} exact/>
-      <Route path="/confirm-reset-pass/:email/:token" element={<ConfirmResetPass/>} exact/>
-      <Route path="/item/:id" element={<Item/>} exact/>
-      <Route path="/cart" element={<Cart/>}/>
-      <Route path="/message" element={<Message/>}/>
-      <Route path="*" element={<Navigate to="/" replace/>}/>
+      <Route path="/" element={ <Home/> }/>
+      <Route path="/about" element={ <About/> }/>
+      <Route path="/login" element={ <Auth authmode={SIGNIN}/> }/>
+      <Route path="/register" element={ <Auth authmode={REGISTER}/> }/>            
+      <Route path="/reset-pass" element={ <Auth authmode={CHANGEPASS}/>} exact/>
+      <Route path="/reset-pass/:email/:token" element={ <ConfirmResetPass/> } exact/>
+      <Route path="/account" element={ isLoggedIn ? <Account/> : <Navigate to="/login"/> }/>
+      <Route path="/item/:id" element={ <Item/>} exact/>
+      <Route path="/cart" element={ <Cart/>} />
+      <Route path="/message" element={ <Message/>} />
+      <Route path="*" element={ <Navigate to="/" replace/>} />
     </Routes>
   );
 
