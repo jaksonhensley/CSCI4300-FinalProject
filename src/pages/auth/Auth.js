@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 
 import { SIGNIN, CHANGEPASS, REGISTER } from "./AuthMode";
 import "./Auth.css";
@@ -126,7 +125,7 @@ const Auth = ({authmode}) => {
               />
             </div>                                                
             <div className="d-grid gap-2 mt-3">
-              <button type="submit" className="login-button">
+              <button type="submit" className="login-button" onClick={handleRegister}>
                 Register
               </button>
             </div>
