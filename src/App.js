@@ -9,15 +9,14 @@ import {
 import NavBar from "./shared/components/nav/NavBar";
 import Home from "./pages/Home";
 import About from "./pages/about/About";
-import Account from "./pages/Account";
+import Account from "./pages/account/Account";
 import Auth from "./pages/auth/Auth";
-import ConfirmResetPass from "./pages/ConfirmResetPass";
 import Item from "./pages/Item";
 import Cart from "./pages/Cart";
 import Message from "./pages/Message";
 import Header from "./shared/components/header/Header";
 
-import { SIGNIN, REGISTER, CHANGEPASS } from "./pages/auth/AuthMode";
+import { LOGIN, REGISTER, REQUEST_RESET_PASS, DO_RESET_PASS } from "./pages/auth/AuthMode";
 import AuthContext from "./shared/context/AuthContext";
 
 /*
@@ -75,10 +74,10 @@ const App = () => {
     <Routes>
       <Route path="/" element={ <Home/> }/>
       <Route path="/about" element={ <About/> }/>
-      <Route path="/login" element={ <Auth authmode={SIGNIN}/> }/>
+      <Route path="/login" element={ <Auth authmode={LOGIN}/> }/>
       <Route path="/register" element={ <Auth authmode={REGISTER}/> }/>            
-      <Route path="/reset-pass" element={ <Auth authmode={CHANGEPASS}/>} exact/>
-      <Route path="/reset-pass/:email/:token" element={ <ConfirmResetPass/> } exact/>
+      <Route path="/request-reset-pass" element={ <Auth authmode={REQUEST_RESET_PASS}/>}/>
+      <Route path="/do-reset-pass/:email/:token" element={ <Auth authmode={DO_RESET_PASS}/> }/>
       <Route path="/account" element={ isLoggedIn ? <Account/> : <Navigate to="/login"/> }/>
       <Route path="/item/:id" element={ <Item/>} exact/>
       <Route path="/cart" element={ <Cart/>} />

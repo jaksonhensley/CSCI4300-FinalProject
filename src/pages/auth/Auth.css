@@ -28,23 +28,6 @@
   font-weight: 800;
 }
 
-.login-button {
-  padding: 15px 32px;
-  display: inline-block;
-  font-size: 16px;
-  border-radius: 12px;
-  color: white;
-  background-color: green;
-}
-
-.login-button:hover {
-  border-color: purple;
-  color: black;
-  background-color: lightgreen;
-  transform: scale(1.1);
-  transition: 0.3s;
-}
-
 label {
   font-size: 14px;
   font-weight: 600;

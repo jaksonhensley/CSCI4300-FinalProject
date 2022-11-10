@@ -7,3 +7,36 @@
   cursor: pointer;
   text-decoration: underline;
 }
+
+
+.button-primary {
+  padding: 15px 32px;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 12px;
+  color: white;
+}
+
+.button-primary:hover {
+  color: black;
+  transform: scale(1.1);
+  transition: 0.3s;
+}
+
+.button-primary-green {
+  background-color: green;
+}
+
+.button-primary-red {
+  background-color: red;
+}
+
+.button-primary-green:hover {
+  border-color: purple;
+  background-color: lightgreen;
+}
+
+.button-primary-red {
+  border-color: orange;
+  background-color: crimson;
+}

@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 
-import { SIGNIN, CHANGEPASS, REGISTER } from "./AuthMode";
+import Login from "./fragments/Login";
+import Register from "./fragments/Register";
+import RequestResetPass from "./fragments/RequestResetPassword";
+import DoResetPass from "./fragments/DoResetPassword";
+
+import { LOGIN, REQUEST_RESET_PASS, REGISTER, DO_RESET_PASS } from "./AuthMode";
 import "./Auth.css";
 import "../../shared/style/common.css";
 
@@ -11,152 +16,67 @@ const Auth = ({authmode}) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const resetAll = () => {
+    setEmail("");
+    setUsername("");
+    setPassword("");
+    setConfirmPassword("");
+  };
+
   const handleLogin = (e) => {
     console.log("Clicked login button");
+    resetAll();
     e.preventDefault();
   };
 
   const handleRegister = (e) => {
     console.log("Clicked register button");
-
+    resetAll();
     e.preventDefault();
   };
 
-  const RenderSignin = () => {
-    return (
-      <div className="login-container">
-        <form className="login-form">
-          <div className="login-content">
-            <h3 className="login-form-title">Sign in</h3>
-            <div className="text-center">
-              Not registered?{" "}
-              <span className="link-primary" onClick={() => setMode(REGISTER)}>Register</span>
-            </div>
-            <div className="text-center form-group mt-3">
-              <label>
-                Username
-                <input 
-                  type="text" 
-                  value={username} 
-                  className="form-control mt-1"
-                  placeholder="Enter your username..."
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-              </label>
-            </div>
-            <div className="text-center form-group mt-3">
-              <label>
-                Password
-                <input 
-                  type="password" 
-                  value={password} 
-                  className="form-control mt-1"
-                  placeholder="Enter your password..."
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </label>
-            </div>      
-            <div className="text-center mt-3">
-              <button type="submit" className="login-button" onClick={handleLogin}>
-                Login
-              </button>
-            </div>      
-            <div>
-              <p className="text-center mt-2">
-                Forgot <span className="link-primary" onClick={() => setMode(CHANGEPASS)}>password?</span>
-              </p>
-            </div>       
-          </div>
-        </form>
-      </div>      
-    );
+  const handleRequestResetPass = (e) => {
+    console.log("Clicked button to request a password reset token");
+    resetAll();
+    e.preventDefault();
   };
 
-  const RenderRegister = () => {
-    return (
-      <div className="login-container">
-        <form className="login-form">
-          <div className="login-form-content">
-            <h3 className="login-form-title">Register</h3>
-            <div className="text-center">
-              Already registered?{" "}
-              <span className="link-primary" onClick={() => setMode(SIGNIN)}>
-                Sign In
-              </span>
-            </div>
-            <div className="form-group mt-3">
-              <label>Username</label>
-              <input
-                type="text"
-                value={username}
-                className="form-control mt-1"
-                placeholder="Enter the username you want..."
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-            <div className="form-group mt-3">
-              <label>Email address</label>
-              <input
-                type="email"
-                value={email}
-                className="form-control mt-1"
-                placeholder="Email address..."
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="form-group mt-3">
-              <label>Password</label>
-              <input
-                type="password"
-                value={password}
-                className="form-control mt-1"
-                placeholder="Password..."
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <div className="form-group mt-3">
-              <label>Confirm Password</label>
-              <input 
-                type="password"
-                value={confirmPassword}
-                className="form-control mt-1"
-                placeholder="Confirm password..."
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </div>                                                
-            <div className="d-grid gap-2 mt-3">
-              <button type="submit" className="login-button" onClick={handleRegister}>
-                Register
-              </button>
-            </div>
-            <p className="text-center mt-2">
-              Forgot <span className="link-primary" onClick={() => setMode(CHANGEPASS)}>password?</span>
-            </p>
-          </div>
-        </form>
-      </div>
-    );
-  };
-
-  const RenderChangePass = () => {
-    return (
-      <div>
-
-      </div>
-    );
-  };
-
-  if (mode === SIGNIN) {
-    return <RenderSignin/>;
+  if (mode === LOGIN) {
+    return <Login
+        setMode={setMode}
+        username={username}
+        setUsername={setUsername}
+        password={password}
+        setPassword={setPassword}
+        handleLogin={handleLogin}
+      />;
   } else if (mode === REGISTER) {
-    return <RenderRegister/>;
-  } else if (mode === CHANGEPASS) {
-    return <RenderChangePass/>;
+    return <Register
+        setMode={setMode}
+        username={username}
+        setUsername={setUsername}
+        email={email}
+        setEmail={setEmail}
+        password={password}
+        setPassword={setPassword}
+        confirmPassword={confirmPassword}
+        setConfirmPassword={setConfirmPassword}
+        handleRegister={handleRegister}
+      />;
+  } else if (mode === REQUEST_RESET_PASS) {
+    return <RequestResetPass
+        setMode={setMode}
+        email={email}
+        setEmail={setEmail}
+        handleRequestResetPass={handleRequestResetPass}
+      />;
+  } else if (mode === DO_RESET_PASS) {
+    return <DoResetPass/>;
   }
 };
 
 Auth.defaultProps = {
-  authmode: SIGNIN
+  authmode: LOGIN
 };
 
 export default Auth;
