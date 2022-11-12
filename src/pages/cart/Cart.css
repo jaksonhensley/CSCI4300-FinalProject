@@ -33,19 +33,28 @@
 }
 
 .heading {
-  font-size: 20px;
+  font-size: 75px;
   font-family: ‘Open Sans’;
   font-weight: 700;
   color: #2F3841;
 }
 
 .action {
-  font-size: 14px;
+  font-size: 30px;
   font-family: ‘Open Sans’;
   font-weight: 600;
   color: #E44C4C;
   cursor: pointer;
-  border-bottom: 1px solid #E44C4C;
+  border-radius: 5px;
+  border-spacing: 5px;
+  text-decoration: none;
+}
+
+.action:hover {
+  text-decoration: underline;
+  color: red;
+  transform: scale(1.1);
+  transition: 0.3s;
 }
 
 .item {
@@ -72,7 +81,7 @@
 }
 
 .item-title {
-	line-height: 10px;
+	line-height: 20px;
 	font-size: 32px;
 	font-family: 'Open Sans';
 	font-weight: 800;
@@ -80,30 +89,37 @@
 }
 
 .counter {
-  width: 15%;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+  margin: 0 auto;
+	text-align: center;
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  justify-content: space-between;
+}
+
+.flex-item {
+  margin-right: 40px;
 }
 
 .item-btn {
-  width: 40px;
-	height: 40px;
+  width: 80px;
+	height: 80px;
 	border-radius: 50%;	
-	display: flex;
 	justify-content: center;
 	align-items: center;
-	font-size: 20px;
+	font-size: 30px;
 	font-family: 'Open Sans';
 	font-weight: 900;
 	color: black;
 	cursor: pointer;
 }
 
-item-btn-hover:hover {
-  border-width: 1px;
-  border-style: solid;
-  border: white;
+.item-btn:hover {
   transform: scale(1.1);
   transition: 0.3s;
 }
@@ -155,4 +171,23 @@ item-btn-grey:hover {
 	font-weight: 600;
 	color: #E44C4C;
 	cursor: pointer;
+  text-decoration: none;
+}
+
+.remove:hover {
+  color: red;
+  text-decoration: underline;
+  transform: scale(1.1);
+  transition: 0.3s;
+}
+
+.confirm-order-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.confirm-order {
+  font-weight: bold;
+  font-size: 35px;
 }

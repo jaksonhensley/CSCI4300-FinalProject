@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Button } from "react-bootstrap";
 
 import "./Cart.css";
+import "../../shared/style/common.css";
 
 const Cart = ({items, cart}) => {
   const [cartState, setCartState] = useState(cart);
@@ -39,18 +39,24 @@ const Cart = ({items, cart}) => {
           <div className="about">
             <h1 className="item-title">{item.itemName}</h1>
           </div>
-          <div className="counter">
-            <button
-              onClick={() => changeCartItemCounter(cartItem, 1)} 
-              className={cartItem.counter === 9 ? "item-btn item-btn-grey" : "item-btn item-btn-green item-btn-hover"}>
-              +
-            </button>
-          <div className="counter">{cartItem.counter}</div>
-            <button 
-              onClick={() => changeCartItemCounter(cartItem, -1)} 
-              className={cartItem.counter === 1 ? "item-btn item-btn-grey" : "item-btn item-btn-red itm-btn-hover"}>
-              -
-            </button>
+          <div className="flex-container">
+            <div className="flex-item">
+              <button 
+                onClick={() => changeCartItemCounter(cartItem, -1)} 
+                className={cartItem.counter === 1 ? "item-btn item-btn-grey" : "item-btn item-btn-red"}>
+                -
+              </button>
+            </div>
+            <div className="flex-item counter">
+              {cartItem.counter}
+            </div>
+            <div className="flex-item">
+              <button
+                onClick={() => changeCartItemCounter(cartItem, 1)} 
+                className={cartItem.counter === 9 ? "item-btn item-btn-grey" : "item-btn item-btn-green"}>
+                +
+              </button>             
+            </div>
           </div>
           <div className="price">
             <div className="amount">${item.itemPrice}</div>
@@ -70,6 +76,11 @@ const Cart = ({items, cart}) => {
           <h5 className="action">Remove All</h5>
         </div>        
         {renderedItems}
+        <div className="confirm-order-container">
+        <button className="button-primary button-primary-green">
+          <span className="confirm-order">CONFIRM ORDER</span>
+        </button>
+        </div>
       </div>
     </div>
   );

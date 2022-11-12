@@ -11,7 +11,6 @@ import Home from "./pages/home/Home";
 import About from "./pages/about/About";
 import Account from "./pages/account/Account";
 import Auth from "./pages/auth/Auth";
-import Item from "./pages/Item";
 import Cart from "./pages/cart/Cart";
 import Message from "./pages/Message";
 import Header from "./shared/components/header/Header";
@@ -108,7 +107,6 @@ const App = () => {
       <Route path="/request-reset-pass" element={ <Auth authmode={REQUEST_RESET_PASS}/>}/>
       <Route path="/do-reset-pass/:email/:token" element={ <Auth authmode={DO_RESET_PASS}/> }/>
       <Route path="/account" element={ isLoggedIn ? <Account/> : <Navigate to="/login"/> }/>
-      <Route path="/item/:id" element={ <Item/>} exact/>
       <Route path="/cart" element={ <Cart items={tempItems} cart={tempCart}/>} />
       <Route path="/message" element={ <Message/>} />
       <Route path="*" element={ <Navigate to="/" replace/>} />

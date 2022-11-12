@@ -40,3 +40,7 @@
   border-color: orange;
   background-color: crimson;
 }
+
+.text-center {
+  text-align: center;
+}
