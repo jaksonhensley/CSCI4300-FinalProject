@@ -7,12 +7,12 @@ import {
 } from "react-router-dom";
 
 import NavBar from "./shared/components/nav/NavBar";
-import Home from "./pages/Home";
+import Home from "./pages/home/Home";
 import About from "./pages/about/About";
 import Account from "./pages/account/Account";
 import Auth from "./pages/auth/Auth";
 import Item from "./pages/Item";
-import Cart from "./pages/Cart";
+import Cart from "./pages/cart/Cart";
 import Message from "./pages/Message";
 import Header from "./shared/components/header/Header";
 
@@ -70,6 +70,35 @@ const App = () => {
 
   let routes;
 
+
+  const tempItems = [
+      {
+        id: 1,
+        itemName: "Cornbread",
+        itemPrice: 3,
+        imgSrc: "/img/CornBread.jpg"
+      },
+      {
+        id: 2,
+        itemName: "Grilled corn",
+        itemPrice: 4,
+        imgSrc: "/img/GrilledCorn.jpg"
+      },
+  ];
+
+  const tempCart = [
+    {
+      id: 1,
+      itemId: 1,
+      counter: 3
+    },
+    {
+      id: 2,
+      itemId: 2,
+      counter: 2
+    },   
+  ];
+
   routes = (
     <Routes>
       <Route path="/" element={ <Home/> }/>
@@ -80,7 +109,7 @@ const App = () => {
       <Route path="/do-reset-pass/:email/:token" element={ <Auth authmode={DO_RESET_PASS}/> }/>
       <Route path="/account" element={ isLoggedIn ? <Account/> : <Navigate to="/login"/> }/>
       <Route path="/item/:id" element={ <Item/>} exact/>
-      <Route path="/cart" element={ <Cart/>} />
+      <Route path="/cart" element={ <Cart items={tempItems} cart={tempCart}/>} />
       <Route path="/message" element={ <Message/>} />
       <Route path="*" element={ <Navigate to="/" replace/>} />
     </Routes>

@@ -1,4 +1,6 @@
-import React from 'react';
+import React from "react";
+import { Link } from "react-router-dom";
+
 import './NavBar.css';
 
 const NavBar = () => {
@@ -24,14 +26,18 @@ const NavBar = () => {
   const renderedNavItems = navItems.map((navItem) => {
     return (        
       <li key={navItem.label} className="nav-item">
-        <a href={navItem.link}>{navItem.label}</a>
+        <Link to={navItem.link}>
+          <span>{navItem.label}</span>
+        </Link>      
       </li>
     );
   });
 
   return (
     <React.Fragment>
-      <img className="nav-img" src="/img/CornGrub.png" alt=""/>
+      <Link to="/">
+        <img className="nav-img" src="/img/CornGrub.png" alt=""/>
+      </Link>
       <ul className="nav-links">
         {renderedNavItems}
       </ul>

@@ -1,0 +1,29 @@
+.home-container {
+  margin: auto;
+  margin-top: 50px;
+  width: 90%;
+  height: 70%;
+  background-color: black;
+}
+
+.home-carousel-caption-container {
+  margin: auto;
+  margin-bottom: 75px;
+  margin-top: 150px;
+}
+
+.home-carousel-img-container {
+  border-width: 5px;
+  border-style: solid;
+  border-color: white;
+  margin: auto;
+  width: 80%;
+  height: 75%;
+  margin-top: 5%;
+}
+
+.home-carousel-img-container img {
+  margin: auto;
+  width: 400px;
+  height: 400px;
+}

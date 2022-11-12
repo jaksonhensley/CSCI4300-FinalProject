@@ -1,0 +1,158 @@
+.page-body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom right, #E3F0FF, #FAFCFF);
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 70%;
+  height: auto;
+  margin: auto;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0px 25px 40px #1687d933;
+}
+
+.about {
+	height: 100%;
+	width: 24%;
+  text-align: center;
+}
+
+.header {
+  margin: auto;
+  width: 90%;
+  height: 15%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.heading {
+  font-size: 20px;
+  font-family: ‘Open Sans’;
+  font-weight: 700;
+  color: #2F3841;
+}
+
+.action {
+  font-size: 14px;
+  font-family: ‘Open Sans’;
+  font-weight: 600;
+  color: #E44C4C;
+  cursor: pointer;
+  border-bottom: 1px solid #E44C4C;
+}
+
+.item {
+	margin: auto;
+	width: 90%;
+	height: 300px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.img-box {
+  width: 15%;
+  text-align: center;
+}
+
+.img-box img {
+  height: 175px;
+}
+
+.item-about {
+  height: 100%;
+	width: 24%;
+}
+
+.item-title {
+	line-height: 10px;
+	font-size: 32px;
+	font-family: 'Open Sans';
+	font-weight: 800;
+	color: #202020;
+}
+
+.counter {
+  width: 15%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.item-btn {
+  width: 40px;
+	height: 40px;
+	border-radius: 50%;	
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 20px;
+	font-family: 'Open Sans';
+	font-weight: 900;
+	color: black;
+	cursor: pointer;
+}
+
+item-btn-hover:hover {
+  border-width: 1px;
+  border-style: solid;
+  border: white;
+  transform: scale(1.1);
+  transition: 0.3s;
+}
+
+.item-btn-red {
+  background-color: red;
+}
+
+.item-btn-green {
+  background-color: green;
+}
+
+.item-btn-grey {
+  background-color: grey;
+}
+
+item-btn-grey:hover {
+  background-color: #202020;
+}
+
+.counter {
+  width: 15%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.pad{
+	margin-top: 5px;
+}
+
+.price {
+	height: 100%;
+	text-align: right;
+}
+
+.amount {
+	padding-top: 20px;
+	font-size: 26px;
+	font-family: 'Open Sans';
+	font-weight: 800;
+  color: #202020;
+}
+
+.remove {
+	padding-top: 5px;
+	font-size: 14px;
+	font-family: 'Open Sans';
+	font-weight: 600;
+	color: #E44C4C;
+	cursor: pointer;
+}
