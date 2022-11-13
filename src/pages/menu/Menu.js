@@ -1,44 +1,73 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 import { CUISINE, SIDE, DRINK, DESSERT } from "./MenuSectionType";
 import "./Menu.css";
+import "../../shared/style/common.css";
 
-const Menu = ({menuSectionProp}) => {
-  const [menuSectionState, setMenuSectionState] = useState(menuSectionProp);
+const Menu = ({items, cart, menuSectionType}) => {
+  const [cartState, setCartState] = useState(cart);
+  const [menuSectionTypeState, setMenuSectionTypeState] = useState(menuSectionType);
 
-  const menuSections = [
+  const menuSectionTypes = [
     CUISINE,
     SIDE,
     DRINK,
     DESSERT
   ];
 
-  const renderedMenuSection = menuSections.map((menuSection) => {
-    let isSelected = menuSection === menuSectionState;
+  const getItemsOfType = (type) => {
+    return items.filter((item) => item.itemType === type);
+  }
+
+  const renderedMenuSectionTypeSelector = menuSectionTypes.map((menuSectionType) => {
+    const isSelected = menuSectionType === menuSectionTypeState;
     return (
-      <span 
-        key={menuSection} 
-        onClick={isSelected ? undefined : () => setMenuSectionState(menuSection)}
-        className={isSelected ? "menu-section-selected" : "menu-section-item"}>
-        {menuSection + "s"}
-      </span>
+      <li 
+        key={menuSectionType} 
+        onClick={isSelected ? undefined : () => setMenuSectionTypeState(menuSectionType)}
+        className={isSelected ? "menu-section-type-selected" : "menu-section-type"}>
+        {menuSectionType + "s"}
+      </li>
     );
   });
 
+  const renderedMenuItems = getItemsOfType(menuSectionTypeState).map((item) => {
+    return (
+      <React.Fragment key={item.id}>
+        <hr/>
+        <div className="menu-item">
+          <div className="img-box">
+            <img src={item.imgSrc} alt=""/>
+          </div>
+          <div className="item-about">
+            <h1 className="item-title">{item.itemName}</h1>
+            <h3 className="item-type">{item.itemType + " --- $" + item.itemPrice}</h3>
+          </div>
+          <div className="flex-container">
+            <div className="flex-item">
+              <Link to={"/item/" + item.id}>
+                <span className="button-primary button-primary-green">View Item</span>
+              </Link>    
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  });
+   
   return (
     <div className="menu-container">
-      <div className="menu-section">
-          {renderedMenuSection}
-      </div>
-      <div>
-        <h1>{menuSectionState}</h1>
-      </div>
+      <ul className="menu-section-types">
+        {renderedMenuSectionTypeSelector}
+      </ul>
+      {renderedMenuItems}
     </div>
   );
 };
 
 Menu.defaultProps = {
-  menuSectionProp: CUISINE
+  menuSectionType: CUISINE
 };
 
 export default Menu;

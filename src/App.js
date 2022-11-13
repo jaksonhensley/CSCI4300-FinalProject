@@ -12,6 +12,7 @@ import About from "./pages/about/About";
 import Account from "./pages/account/Account";
 import Auth from "./pages/auth/Auth";
 import Menu from "./pages/menu/Menu";
+import Item from "./pages/item/Item";
 import Cart from "./pages/cart/Cart";
 import Message from "./pages/Message";
 
@@ -153,9 +154,10 @@ const App = () => {
       <Route path="/login" element={ <Auth authmode={LOGIN}/> }/>
       <Route path="/register" element={ <Auth authmode={REGISTER}/> }/>            
       <Route path="/request-reset-pass" element={ <Auth authmode={REQUEST_RESET_PASS}/>}/>
-      <Route path="/do-reset-pass/:email/:token" element={ <Auth authmode={DO_RESET_PASS}/> }/>
+      <Route path="/do-reset-pass/:email/:token" element={ <Auth authmode={DO_RESET_PASS}/> } exact/>
       <Route path="/account" element={ isLoggedIn ? <Account/> : <Navigate to="/login"/> }/>
-      <Route path="/menu" element=<Menu/> />
+      <Route path="/menu" element=<Menu items={tempItems} cart={tempCart}/> />
+      <Route path="/item/:id" element=<Item/> exact/>
       <Route path="/cart" element={ <Cart items={tempItems} cart={tempCart}/>} />
       <Route path="/message" element={ <Message/>} />
       <Route path="*" element={ <Navigate to="/" replace/>} />

@@ -20,10 +20,7 @@ const Cart = ({items, cart}) => {
         let newCount = cartItem.counter + delta;
         if (newCount < 1) {
           newCount = 1;
-        }
-        if (newCount > 9) {
-          newCount = 9;
-        }
+        }       
         return {...cartItem, counter: newCount};
       }
       return cartItem;
