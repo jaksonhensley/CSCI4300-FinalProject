@@ -18,12 +18,16 @@
   border-color: white;
   margin: auto;
   width: 80%;
-  height: 75%;
+  height: 400px;
   margin-top: 5%;
+  
 }
 
 .home-carousel-img-container img {
   margin: auto;
-  width: 400px;
-  height: 400px;
+  margin-top: 25px;
+  max-width: 500px;
+  max-height: 700px;
+  width: auto;
+  height: auto;
 }

@@ -7,7 +7,7 @@ const About = () => {
   return (
     <div className="about-container">
       <h1 className="text-center">
-         Fall 2022 Group Project -- CSCI 4300
+         Group Project -- CSCI 4300
       </h1>
       <hr/>
       <h2 className="text-center">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import "./Cart.css";
 import "../../shared/style/common.css";
@@ -6,13 +6,17 @@ import "../../shared/style/common.css";
 const Cart = ({items, cart}) => {
   const [cartState, setCartState] = useState(cart);
 
-  const findItem = (cartItem) => {
-    return items.find((item) => item.id === cartItem.itemId);
+  const filterCartItems = () => {
+    setCartState(cartState => cartState.filter((cartItem) => cartItem.counter > 0));
   };
 
-  const changeCartItemCounter = (item, delta) => {
-    const updatedCart = cartState.map((cartItem) => {
-      if (item.id === cartItem.id) {
+  useEffect(() => {
+    filterCartItems();
+  }, [])
+
+  const changeCartItemCounter = (cartItemToChange, delta) => {
+    let updatedCart = cartState.map((cartItem) => {
+      if (cartItemToChange.itemId === cartItem.itemId) {
         let newCount = cartItem.counter + delta;
         if (newCount < 1) {
           newCount = 1;
@@ -25,19 +29,21 @@ const Cart = ({items, cart}) => {
       return cartItem;
     });
     setCartState(updatedCart);
+    filterCartItems();
   };  
 
-  const renderedItems = cartState.map((cartItem) => {
-    const item = findItem(cartItem);
+  const renderedCartItems = cartState.map((cartItem) => {    
+    const item = items.find((item) => item.id === cartItem.itemId);
     return (
-      <React.Fragment key={cartItem.id}>
+      <React.Fragment key={cartItem.itemId}>
         <hr/>
         <div className="item pad">
           <div className="img-box">
             <img src={item.imgSrc} alt=""/>
           </div>
-          <div className="about">
+          <div className="item-about">
             <h1 className="item-title">{item.itemName}</h1>
+            <h3 className="item-type">{item.itemType}</h3>
           </div>
           <div className="flex-container">
             <div className="flex-item">
@@ -60,22 +66,24 @@ const Cart = ({items, cart}) => {
           </div>
           <div className="price">
             <div className="amount">${item.itemPrice}</div>
-            <div className="remove"><u>Remove</u></div>
+            <div className="remove">Remove</div>
           </div>
         </div>
         <hr/>
-      </React.Fragment>
-    );   
+      </React.Fragment>  
+    );
   });
 
   return (
     <div className="page-body">
       <div className="container">
-        <div className="header">
-          <h3 className="heading">Shopping Cart</h3>
-          <h5 className="action">Remove All</h5>
+        <div className="cart-header">
+          <h3 className="cart-heading">Shopping Cart</h3>
+          <div>
+            <span className="action">Remove All</span>
+          </div>
         </div>        
-        {renderedItems}
+        {renderedCartItems}
         <div className="confirm-order-container">
         <button className="button-primary button-primary-green">
           <span className="confirm-order">CONFIRM ORDER</span>

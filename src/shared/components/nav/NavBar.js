@@ -14,12 +14,16 @@ const NavBar = () => {
       link: "/about"
     },
     {
-      label: "ACCOUNT",
-      link: "/account"
+      label: "MENU",
+      link: "/menu"
     },
     {
       label: "CART",
       link: "/cart"
+    },
+    {
+      label: "ACCOUNT",
+      link: "/account"
     }
   ];
 
@@ -34,14 +38,16 @@ const NavBar = () => {
   });
 
   return (
-    <React.Fragment>
+    <div className="header">
       <Link to="/">
-        <img className="nav-img" src="/img/CornGrub.png" alt=""/>
+        <img className="nav-img" src="/img/Corn-Grub.png" alt=""/>
       </Link>
-      <ul className="nav-links">
-        {renderedNavItems}
-      </ul>
-    </React.Fragment>
+      <div className="nav-links-container">
+        <ul className="nav-links">
+          {renderedNavItems}
+        </ul>
+      </div>
+    </div>
   );
 };
 

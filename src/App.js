@@ -11,11 +11,12 @@ import Home from "./pages/home/Home";
 import About from "./pages/about/About";
 import Account from "./pages/account/Account";
 import Auth from "./pages/auth/Auth";
+import Menu from "./pages/menu/Menu";
 import Cart from "./pages/cart/Cart";
 import Message from "./pages/Message";
-import Header from "./shared/components/header/Header";
 
 import { LOGIN, REGISTER, REQUEST_RESET_PASS, DO_RESET_PASS } from "./pages/auth/AuthMode";
+import { CUISINE, SIDE, DRINK, DESSERT } from "./pages/menu/MenuSectionType";
 import AuthContext from "./shared/context/AuthContext";
 
 /*
@@ -67,38 +68,85 @@ const App = () => {
     setIsLoggedIn(false);
   }, []);
 
-  let routes;
-
-
   const tempItems = [
-      {
-        id: 1,
-        itemName: "Cornbread",
-        itemPrice: 3,
-        imgSrc: "/img/CornBread.jpg"
-      },
-      {
-        id: 2,
-        itemName: "Grilled corn",
-        itemPrice: 4,
-        imgSrc: "/img/GrilledCorn.jpg"
-      },
-  ];
-
-  const tempCart = [
     {
       id: 1,
-      itemId: 1,
-      counter: 3
+      itemName: "Shepherd's Pie",
+      itemType: CUISINE,
+      itemPrice: 9,
+      imgSrc: "/img/Shepherd's-Pie.jpg"
     },
     {
       id: 2,
+      itemName: "Cornmeal-Fried Fish",
+      itemType: CUISINE,
+      itemPrice: 10,
+      imgSrc: "/img/Cornmeal-Fried-Fish.jpg"
+    },
+    {
+      id: 3,
+      itemName: "Cornbread",
+      itemType: SIDE,
+      itemPrice: 3,
+      imgSrc: "/img/Corn-Bread.jpg"
+    },
+    {
+      id: 4,
+      itemName: "Grilled corn",
+      itemType: SIDE,
+      itemPrice: 4,
+      imgSrc: "/img/Grilled-Corn.jpg"
+    },
+    {
+      id: 5,
+      itemName: "Corn Milk",
+      itemType: DRINK,
+      itemPrice: 3,
+      imgSrc: "/img/Corn-Milk.jpg"
+    },
+    {
+      id: 6,
+      itemName: "Corn Beer",
+      itemType: DRINK,
+      itemPrice: 5,
+      imgSrc: "/img/Corn-Beer.png"
+    },
+    {
+      id: 7,
+      itemName: "Corn Pudding",
+      itemType: DESSERT,
+      itemPrice: 6,
+      imgSrc: "/img/Corn-Pudding.jpg"
+    },
+    {
+      id: 8,
+      itemName: "Sweet Corn Cake",
+      itemType: DESSERT,
+      itemPrice: 6,
+      imgSrc: "/img/Sweet-Corn-Cake.jpg"
+    }
+  ];
+
+  const tempCart = [
+    { 
+      itemId: 1,
+      counter: 0
+    },
+    { 
       itemId: 2,
+      counter: -1
+    },
+    {
+      itemId: 3,
+      counter: 3
+    },
+    {     
+      itemId: 4,
       counter: 2
     },   
   ];
 
-  routes = (
+  const routes = (
     <Routes>
       <Route path="/" element={ <Home/> }/>
       <Route path="/about" element={ <About/> }/>
@@ -107,6 +155,7 @@ const App = () => {
       <Route path="/request-reset-pass" element={ <Auth authmode={REQUEST_RESET_PASS}/>}/>
       <Route path="/do-reset-pass/:email/:token" element={ <Auth authmode={DO_RESET_PASS}/> }/>
       <Route path="/account" element={ isLoggedIn ? <Account/> : <Navigate to="/login"/> }/>
+      <Route path="/menu" element=<Menu/> />
       <Route path="/cart" element={ <Cart items={tempItems} cart={tempCart}/>} />
       <Route path="/message" element={ <Message/>} />
       <Route path="*" element={ <Navigate to="/" replace/>} />
@@ -118,9 +167,7 @@ const App = () => {
       value={{ isLoggedIn: isLoggedIn, login: doLogin, logout: doLogout}} 
     >
       <Router>     
-          <Header>
-            <NavBar/>
-          </Header>       
+          <NavBar/>
           {routes}
       </Router>
     </AuthContext.Provider>

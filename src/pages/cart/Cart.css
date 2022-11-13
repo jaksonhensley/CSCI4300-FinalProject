@@ -9,12 +9,11 @@
 }
 
 .container {
-  width: 70%;
   height: auto;
   margin: auto;
   background-color: #ffffff;
   border-radius: 20px;
-  box-shadow: 0px 25px 40px #1687d933;
+  box-shadow: 0px 5px 10px #1687d933;
 }
 
 .about {
@@ -23,7 +22,7 @@
   text-align: center;
 }
 
-.header {
+.cart-header {
   margin: auto;
   width: 90%;
   height: 15%;
@@ -32,7 +31,7 @@
   align-items: center;
 }
 
-.heading {
+.cart-heading {
   font-size: 75px;
   font-family: ‘Open Sans’;
   font-weight: 700;
@@ -67,8 +66,8 @@
 }
 
 .img-box {
-  width: 15%;
   text-align: center;
+  width: 100%;
 }
 
 .img-box img {
@@ -80,12 +79,23 @@
 	width: 24%;
 }
 
+.item-about {
+  text-align: center;
+}
+
 .item-title {
+  white-space: nowrap;
+  padding: 50px 15px 25px 15px;
 	line-height: 20px;
 	font-size: 32px;
 	font-family: 'Open Sans';
-	font-weight: 800;
+	font-weight: 800px;
 	color: #202020;
+}
+
+.item-type {  
+  font-weight: 400px;
+  font-size: 16px;
 }
 
 .counter {
@@ -103,11 +113,11 @@
 }
 
 .flex-item {
-  margin-right: 40px;
+  margin-right: 10px;
 }
 
 .item-btn {
-  width: 80px;
+  width: 70px;
 	height: 80px;
 	border-radius: 50%;	
 	justify-content: center;
@@ -147,7 +157,7 @@ item-btn-grey:hover {
 	align-items: center;
 }
 
-.pad{
+.pad {
 	margin-top: 5px;
 }
 
@@ -190,4 +200,37 @@ item-btn-grey:hover {
 .confirm-order {
   font-weight: bold;
   font-size: 35px;
+}
+
+@media screen and (max-width: 1000px) {
+ 
+  .cart-header {
+    margin: auto;
+    width: 90%;
+    display: grid;
+    grid-template-rows: 2(100px);
+    align-items: center;
+  }
+
+  .action {
+    text-align: right;
+    width: auto;
+  }
+
+}
+
+@media screen and (max-width: 775px) {
+
+  .item {
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .price {
+	  height: 100%;
+  	text-align: center;
+  }
+
 }
