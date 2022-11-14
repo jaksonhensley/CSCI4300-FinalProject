@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Table } from "react-bootstrap";
 
 import "./Cart.css";
 import "../../shared/style/common.css";
@@ -14,7 +15,7 @@ const Cart = ({items, cart}) => {
     filterCartItems();
   }, [])
 
-  const changeCartItemCounter = (cartItemToChange, delta) => {
+  const changeCartItemCounter = (cartItemToChange, delta) =>{ 
     let updatedCart = cartState.map((cartItem) => {
       if (cartItemToChange.itemId === cartItem.itemId) {
         let newCount = cartItem.counter + delta;
@@ -29,64 +30,70 @@ const Cart = ({items, cart}) => {
     filterCartItems();
   };  
 
-  const renderedCartItems = cartState.map((cartItem) => {    
+  const renderedCartItems = cartState.map((cartItem) => {
     const item = items.find((item) => item.id === cartItem.itemId);
+    const totalCost = cartItem.counter * item.itemPrice;
     return (
-      <React.Fragment key={cartItem.itemId}>
-        <hr/>
-        <div className="item pad">
-          <div className="img-box">
-            <img src={item.imgSrc} alt=""/>
+      <tr key={item.id}>
+        <td className="cell">
+          <h1 className="item-title">{item.itemName}</h1>
+          <img className="item-img" src={item.imgSrc} alt=""/>
+          <h3 className="item-type">{item.itemType}</h3>
+            <Table striped bordered hover size="sm">
+              <tbody>
+                <tr>
+                  <td>
+                    <button 
+                      onClick={() => changeCartItemCounter(cartItem, -1)} 
+                      className={cartItem.counter === 1 ? "item-btn item-btn-grey" : "item-btn item-btn-red"}>
+                      -
+                    </button>
+                  </td>                 
+                  <td>
+                    <h1 className="text-center">
+                      {cartItem.counter}
+                    </h1>
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => changeCartItemCounter(cartItem, 1)} 
+                      className={cartItem.counter === 9 ? "item-btn item-btn-grey" : "item-btn item-btn-green"}>
+                      +
+                    </button>                               
+                  </td>
+                </tr>
+              </tbody>
+            </Table>           
+          <span className="item-title">${totalCost}</span>
+          <div className="remove-btn-container">
+            <span className="button-primary button-primary-red">
+              Remove Item
+            </span>
           </div>
-          <div className="item-about">
-            <h1 className="item-title">{item.itemName}</h1>
-            <h3 className="item-type">{item.itemType}</h3>
-          </div>
-          <div className="flex-container">
-            <div className="flex-item">
-              <button 
-                onClick={() => changeCartItemCounter(cartItem, -1)} 
-                className={cartItem.counter === 1 ? "item-btn item-btn-grey" : "item-btn item-btn-red"}>
-                -
-              </button>
-            </div>
-            <div className="flex-item counter">
-              {cartItem.counter}
-            </div>
-            <div className="flex-item">
-              <button
-                onClick={() => changeCartItemCounter(cartItem, 1)} 
-                className={cartItem.counter === 9 ? "item-btn item-btn-grey" : "item-btn item-btn-green"}>
-                +
-              </button>             
-            </div>
-          </div>
-          <div className="price">
-            <div className="amount">${item.itemPrice}</div>
-            <div className="remove">Remove</div>
-          </div>
-        </div>
-        <hr/>
-      </React.Fragment>  
+        </td>
+      </tr>
     );
   });
 
   return (
-    <div className="page-body">
-      <div className="container">
-        <div className="cart-header">
-          <h3 className="cart-heading">Shopping Cart</h3>
-          <div>
-            <span className="action">Remove All</span>
-          </div>
-        </div>        
-        {renderedCartItems}
-        <div className="confirm-order-container">
+    <div className="cart-page-body">
+    <div className="cart-container">    
+      <div className="cart-table-container">
+        <Table striped bordered hover>
+          <thead>
+            <th className="text-center cart-heading">Shopping Cart</th>         
+          </thead>
+          <tbody>
+            {renderedCartItems}
+          </tbody>
+        </Table>   
+      </div>
+      <div className="confirm-order-container">
         <button className="button-primary button-primary-green">
           <span className="confirm-order">CONFIRM ORDER</span>
         </button>
-        </div>
       </div>
+    </div>    
     </div>
   );
 };

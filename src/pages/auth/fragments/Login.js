@@ -13,7 +13,7 @@ const Login = ({
   return (
     <div className="login-container">
       <form className="login-form">
-        <div className="login-content">
+        <div className="login-form-content">
           <h3 className="login-form-title">Sign in</h3>
           <div className="text-center">
             Not registered?{" "}

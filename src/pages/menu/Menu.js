@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Table } from "react-bootstrap";
 
 import { CUISINE, SIDE, DRINK, DESSERT } from "./MenuSectionType";
-import "./Menu.css";
 import "../../shared/style/common.css";
+import "./Menu.css";
 
 const Menu = ({items, cart, menuSectionType}) => {
   const [cartState, setCartState] = useState(cart);
@@ -18,7 +18,19 @@ const Menu = ({items, cart, menuSectionType}) => {
 
   const getItemsOfType = (type) => {
     return items.filter((item) => item.itemType === type);
-  }
+  };
+
+  const cartContainsItem = (item) => {
+    return cartState.some((cartItem) => cartItem.itemId === item.id);
+  };
+
+  const addToCart = (item) => {
+    const newCartItem = {
+      itemId: item.id,
+      counter: 1
+    };
+    setCartState(currentCartState => [...currentCartState, newCartItem]);
+  };
 
   const renderedMenuSectionTypeSelector = menuSectionTypes.map((menuSectionType) => {
     const isSelected = menuSectionType === menuSectionTypeState;
@@ -33,26 +45,25 @@ const Menu = ({items, cart, menuSectionType}) => {
   });
 
   const renderedMenuItems = getItemsOfType(menuSectionTypeState).map((item) => {
-    return (
-      <React.Fragment key={item.id}>
-        <hr/>
-        <div className="menu-item">
-          <div className="img-box">
-            <img src={item.imgSrc} alt=""/>
-          </div>
-          <div className="item-about">
-            <h1 className="item-title">{item.itemName}</h1>
-            <h3 className="item-type">{item.itemType + " --- $" + item.itemPrice}</h3>
-          </div>
-          <div className="flex-container">
-            <div className="flex-item">
-              <Link to={"/item/" + item.id}>
-                <span className="button-primary button-primary-green">View Item</span>
-              </Link>    
-            </div>
-          </div>
-        </div>
-      </React.Fragment>
+    return (      
+      <tr key={item.id}>
+        <td className="cell">
+          <span className="item-title">{item.itemName + " - $" + item.itemPrice}</span>
+          <img className="item-img" src={item.imgSrc} alt=""/>
+          <div className="item-action">
+            {cartContainsItem(item) &&
+              <span className="already-in-cart">Already in Cart</span>
+            }
+            {!cartContainsItem(item) && 
+              <button 
+                onClick={() => addToCart(item)}
+                className="button-primary button-primary-green">
+                <span>Add to Cart</span>
+              </button>
+            }    
+          </div>  
+        </td>
+      </tr>            
     );
   });
    
@@ -61,7 +72,13 @@ const Menu = ({items, cart, menuSectionType}) => {
       <ul className="menu-section-types">
         {renderedMenuSectionTypeSelector}
       </ul>
-      {renderedMenuItems}
+      <div className="menu-table-container">
+        <Table>              
+          <tbody>
+            {renderedMenuItems}
+          </tbody>
+        </Table>      
+      </div>
     </div>
   );
 };

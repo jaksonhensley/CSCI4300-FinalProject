@@ -10,53 +10,14 @@ import NavBar from "./shared/components/nav/NavBar";
 import Home from "./pages/home/Home";
 import About from "./pages/about/About";
 import Account from "./pages/account/Account";
+import DoResetPwd from "./pages/reset-pwd/DoResetPwd";
 import Auth from "./pages/auth/Auth";
 import Menu from "./pages/menu/Menu";
-import Item from "./pages/item/Item";
 import Cart from "./pages/cart/Cart";
-import Message from "./pages/Message";
 
-import { LOGIN, REGISTER, REQUEST_RESET_PASS, DO_RESET_PASS } from "./pages/auth/AuthMode";
+import { LOGIN, REGISTER, REQUEST_RESET_PASS } from "./pages/auth/AuthMode";
 import { CUISINE, SIDE, DRINK, DESSERT } from "./pages/menu/MenuSectionType";
 import AuthContext from "./shared/context/AuthContext";
-
-/*
-
-  Home: 
-    Home page with logo, some "featured" items listed with links
-
-  About:
-    Introduce team members and talk about inspiration for project
-
-  Login:
-    User can login. If logged in, redirect to message page saying "already logged in".
-
-  Register:
-    User can register. If logged in, redirect to message page saying "to register new account, please logout".
-
-  Account:
-    User can view and edit profile. If not logged in, redirect to login page.
-
-  Request reset pass:
-    User can request password change. If logged in, just say "token sent to your email". If not logged in,
-    prompt user for email address and then send token.
-
-  Confirm reset pass:
-    Requires email and token as params. (Email is used to query user in database.) If user and token associated
-    with user are both found in db, then prompt user to and confirm new password. Otherwise, throw error message
-    and ask user to try again with new token.
-
-  Item:
-    Requires item id as param. User can view item and click on button to add it to cart. If user is not logged in,
-    then clicking on "add to cart" will redirect to login page. Have it set up so that after logging in, user is 
-    still redirected to cart with item successfully added.
-
-  Message:
-    Not sure if this page is needed. Just a template page for showing any "on success" or "on error" messages.
-
-  Default to home page if no matching url.
-
-*/
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -69,6 +30,42 @@ const App = () => {
     setIsLoggedIn(false);
   }, []);
 
+  const tempUsers = [
+    {
+      id: 1,
+      email: "john@email.com",
+      username: "John",
+      password: "123"
+    },
+    {
+      id: 2,
+      email: "jackson@email.com",
+      username: "Jackson",
+      password: "123"
+    },
+    {
+      id: 3,
+      email: "jacob@email.com",
+      username: "Jacob",
+      password: "123"
+    }
+  ];
+
+  const tempPwdResetTokens = [
+    {
+      userId: 1,
+      code: "token1"
+    },
+    {
+      userId: 2,
+      code: "token2"
+    },
+    {
+      userId: 1,
+      code: "token3"
+    }
+  ];
+
   const tempItems = [
     {
       id: 1,
@@ -79,7 +76,7 @@ const App = () => {
     },
     {
       id: 2,
-      itemName: "Cornmeal-Fried Fish",
+      itemName: "Cornmeal Fish",
       itemType: CUISINE,
       itemPrice: 10,
       imgSrc: "/img/Cornmeal-Fried-Fish.jpg"
@@ -154,12 +151,10 @@ const App = () => {
       <Route path="/login" element={ <Auth authmode={LOGIN}/> }/>
       <Route path="/register" element={ <Auth authmode={REGISTER}/> }/>            
       <Route path="/request-reset-pass" element={ <Auth authmode={REQUEST_RESET_PASS}/>}/>
-      <Route path="/do-reset-pass/:email/:token" element={ <Auth authmode={DO_RESET_PASS}/> } exact/>
+      <Route path="/do-reset-pass/:userIdParam/:codeParam" element={ <DoResetPwd users={tempUsers} tokens={tempPwdResetTokens}/> } exact/>
       <Route path="/account" element={ isLoggedIn ? <Account/> : <Navigate to="/login"/> }/>
       <Route path="/menu" element=<Menu items={tempItems} cart={tempCart}/> />
-      <Route path="/item/:id" element=<Item/> exact/>
       <Route path="/cart" element={ <Cart items={tempItems} cart={tempCart}/>} />
-      <Route path="/message" element={ <Message/>} />
       <Route path="*" element={ <Navigate to="/" replace/>} />
     </Routes>
   );

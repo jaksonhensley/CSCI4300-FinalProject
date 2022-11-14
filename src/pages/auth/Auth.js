@@ -3,9 +3,8 @@ import React, { useState } from "react";
 import Login from "./fragments/Login";
 import Register from "./fragments/Register";
 import RequestResetPass from "./fragments/RequestResetPassword";
-import DoResetPass from "./fragments/DoResetPassword";
 
-import { LOGIN, REQUEST_RESET_PASS, REGISTER, DO_RESET_PASS } from "./AuthMode";
+import { LOGIN, REQUEST_RESET_PASS, REGISTER } from "./AuthMode";
 import "./Auth.css";
 import "../../shared/style/common.css";
 
@@ -70,9 +69,7 @@ const Auth = ({authmode}) => {
         setEmail={setEmail}
         handleRequestResetPass={handleRequestResetPass}
       />;
-  } else if (mode === DO_RESET_PASS) {
-    return <DoResetPass/>;
-  }
+  } 
 };
 
 Auth.defaultProps = {

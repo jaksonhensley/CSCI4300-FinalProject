@@ -31,7 +31,7 @@ const RequestResetPass = ({
           </div>                                                       
           <div className="d-grid gap-2 mt-3">
             <button className="button-primary button-primary-green" onClick={handleRequestResetPass}>
-              Send Me a Reset Link
+              Send Me a Link
             </button>
           </div>
         </div>
