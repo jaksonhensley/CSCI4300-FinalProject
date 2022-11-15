@@ -13,4 +13,4 @@
 
 ### The Project:
 
-This is the semester-long group project for CSCI 4300 - Web Programming.
+Fall 2022 group project for CSCI 4300 - Web Programming.
