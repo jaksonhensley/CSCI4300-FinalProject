@@ -1,21 +1,9 @@
-const { Schema, model, default: mongoose } = require("mongoose");
-const { ObjectId } = mongoose.Schema;
+const { Schema, model } = require("mongoose");
 
-const PwdResetTokenSchema = new Schema(
-  {
-    token: {
-      type: String,
-      required: true
-    },   
-    user: {
-      type: ObjectId,
-      ref: "User"
-    }
-  },
-  {
-    timestamps: true
-  }
-);
+const PwdResetTokenSchema = new Schema({
+    token: String,
+    userId: Schema.Types.ObjectId
+});
 
 const PwdResetToken = model("PwdResetToken", PwdResetTokenSchema);
 module.exports = PwdResetToken;

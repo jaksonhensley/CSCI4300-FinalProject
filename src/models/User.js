@@ -1,26 +1,13 @@
-const { Schema, model, default: mongoose } = require("mongoose");
-const { ObjectId } = mongoose.Schema;
+const { Schema, model } = require("mongoose");
 
-const UserSchema = new Schema(
-  {
-    email: {
-      type: String,
-      required: true
-    },
-    password: {
-      type: String,
-      required: true
-    },
-    purchasedItems: [{
-      type: ObjectId,
-      ref: "PurchasedItem",
-      required: true
-    }]
-  },
-  {
-    timestamps: true
-  }
-);
+const UserSchema = new Schema({
+  email: String,
+  password: String,
+  cart: [{
+    itemId: Schema.Types.ObjectId,
+    count: Number
+  }]
+});
 
 const User = model("User", UserSchema);
 module.exports = User;
