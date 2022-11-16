@@ -30,6 +30,8 @@ const App = () => {
     setIsLoggedIn(false);
   }, []);
 
+  
+
   const tempUsers = [
     {
       id: 1,
@@ -146,16 +148,67 @@ const App = () => {
 
   const routes = (
     <Routes>
-      <Route path="/" element={ <Home/> }/>
-      <Route path="/about" element={ <About/> }/>
-      <Route path="/login" element={ <Auth authmode={LOGIN}/> }/>
-      <Route path="/register" element={ <Auth authmode={REGISTER}/> }/>            
-      <Route path="/request-reset-pass" element={ <Auth authmode={REQUEST_RESET_PASS}/>}/>
-      <Route path="/do-reset-pass/:userIdParam/:codeParam" element={ <DoResetPwd users={tempUsers} tokens={tempPwdResetTokens}/> } exact/>
-      <Route path="/account" element={ isLoggedIn ? <Account/> : <Navigate to="/login"/> }/>
-      <Route path="/menu" element=<Menu items={tempItems} cart={tempCart}/> />
-      <Route path="/cart" element={ <Cart items={tempItems} cart={tempCart}/>} />
-      <Route path="*" element={ <Navigate to="/" replace/>} />
+      <Route 
+        path="/" 
+        element={ 
+          <Home/> 
+        }
+      />
+      <Route 
+        path="/about" 
+        element={ 
+          <About/> 
+        }
+      />
+      <Route 
+        path="/login" 
+        element={ 
+          <Auth authmode={LOGIN}/> 
+        }
+      />
+      <Route 
+        path="/register" 
+        element={ 
+          <Auth authmode={REGISTER}/> 
+        }
+      />            
+      <Route 
+        path="/request-reset-pass" 
+        element={ 
+          <Auth authmode={REQUEST_RESET_PASS}/>
+        }
+      />
+      <Route 
+        path="/do-reset-pass/:userIdParam/:codeParam" 
+        element={ 
+          <DoResetPwd users={tempUsers} tokens={tempPwdResetTokens}/> 
+        } 
+        exact
+      />
+      <Route 
+        path="/account" 
+        element={ 
+          isLoggedIn ? <Account/> : <Navigate to="/login"/> 
+        }
+      />
+      <Route 
+        path="/menu" 
+        element={
+          <Menu items={tempItems} cart={tempCart}/> 
+        }
+      />
+      <Route 
+        path="/cart" 
+        element={ 
+          <Cart items={tempItems} cart={tempCart}/>
+        } 
+      />
+      <Route 
+        path="*" 
+        element={ 
+          <Navigate to="/" replace/>
+        } 
+      />
     </Routes>
   );
 
