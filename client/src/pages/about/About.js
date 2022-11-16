@@ -29,11 +29,11 @@ const About = () => {
       <hr/>
       <div className="text-center">
         <a 
-          className="github-link link-primary" 
+          className="github-link" 
           target="_blank" 
           rel="noopener noreferrer"
           href="https://github.com/jaksonhensley/CSCI4300-FinalProject">
-          Github repo
+          Github Repo
         </a>
       </div>
     </div>

@@ -1,8 +1,7 @@
 .menu-container {
   height: 100%;  
-  width: 90%;
+  width: 100%;
   margin: auto;
-  background-color: gray;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -12,21 +11,24 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  width: 100%;
+  width: fill;
   height: 80px;
-  margin-top: 20px;
   align-items: center;
-  background-color: white;  
+  background-color: rgb(18, 18, 18);
+  color: gray;
 }
 
 .menu-section-type-selected {
+  transition: 0.3s;
   text-decoration: none;
   font-size: 30px;
   list-style: none;
-  margin-right: 50px; 
+  margin-right: 40px; 
   font-weight: bold;
-  text-decoration: underline;
-  background-color: gray;
+  background-color: #ff9900;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
+  color: white;
 }
 
 .menu-section-type {
@@ -42,15 +44,17 @@
 }
 
 .menu-section-type:hover {
-  background-color: orange;
   transform: scale(1.1);
   transition: 0.3s;
   cursor: pointer;
+  color: white;
 }
 
 .cell {
   text-align: center;  
   margin: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .item-img {
@@ -58,31 +62,69 @@
   height: auto;
   max-width: 200px;
   max-height: 200px;
-  margin-left: 10px;
+  align-self: center;
+}
+
+.item-title {
+  color: white;
 }
 
 .item-action {
   margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.add-to-cart {
+  background-color: white;
+  color: black;
+  padding: 5px 20px 5px 20px;
+  border-radius: 50px;
+}
+
+.add-to-cart:hover {
+  transform: scale(1.1);
+  transition: 0.3s;
+  font-weight: bold;
+  background-color: #ff9900;
+  color: white;
+  padding: 5px 20px 5px 20px;
+  border-radius: 50px;
 }
 
 .already-in-cart {
-  font-size: 24px;
+  color: black;
+  background-color: white;
+  padding: 5px 20px 5px 20px;
+  border-radius: 50px;
+}
+
+.already-in-cart:hover {
+  transform: scale(1.1);
+  transition: 0.3s;
+  background-color: #ffbdbd;
 }
 
 @media screen and (max-width: 800px) {
   
   .menu-section-types {
-    display: grid;
     grid-template-columns: none;
     grid-template-rows: repeat(4, 60px);
     width: 100%;
     height: auto;
     justify-content: center;
-    padding-top: 10px;
-    margin-top: 20px;
+    padding: 10px 0 10px 0;
     align-items: center;
     text-align: center;
-    background-color: white;  
-  } 
+    overflow:hidden;
+  }
+
+  #left-scroll {
+    justify-content: left;
+    top: 0;
+  }
+
+  #right-scroll {
+    justify-content: right;
+  }
 
 }

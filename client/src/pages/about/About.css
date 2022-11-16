@@ -1,22 +1,43 @@
 .about-container {
-  padding-top: 50px;
-  margin: auto;
-  width: 500px;
-  background-color: white;
+  padding: 15px 15px 15px 15px;
+  margin: 20px auto auto auto;
+  width: 40%;
+  background-color: rgb(18, 18, 18);
+  border-radius: 20px;
+  color: white;
 }
 
 .team-list-container {
-  justify-content: left;
-  padding-left: 20px;
+  display: table;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .team-list {
-  padding-left: 40px;
-  display: inline-block; 
-	text-align: left;   
+  display: inline-block;
+  text-align: left;
 }
 
 .github-link {
+  margin: 10px 0;
   font-weight: bold;
   font-size: xx-large;
+  background-color: #ff9900;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
+  color: white;
+  text-decoration: none;
+}
+
+.github-link:hover {
+  transform: scale(1.1);
+  transition: 0.3s;
+  color: black;
+  background: white;
+}
+
+@media screen and (max-width: 800px) {
+  .about-container {
+    width: 80%;
+  }
 }
