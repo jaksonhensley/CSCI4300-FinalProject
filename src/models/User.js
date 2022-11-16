@@ -1,4 +1,5 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, default: mongoose } = require("mongoose");
+const { ObjectId } = mongoose.Schema;
 
 const UserSchema = new Schema(
   {
@@ -9,7 +10,12 @@ const UserSchema = new Schema(
     password: {
       type: String,
       required: true
-    }
+    },
+    purchasedItems: [{
+      type: ObjectId,
+      ref: "PurchasedItem",
+      required: true
+    }]
   },
   {
     timestamps: true
