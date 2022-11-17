@@ -11,7 +11,7 @@
   padding-top: 30px;
   padding-bottom: 20px;
   border-radius: 8px;
-  background-color: white;
+  background-color: rgb(18, 18, 18);
 }
 
 .login-form-content {
@@ -24,14 +24,30 @@
   text-align: center;
   margin-bottom: 1em;
   font-size: 24px;
-  color: rgb(34, 34, 34);
+  color: white;
   font-weight: 800;
 }
 
 label {
   font-size: 14px;
   font-weight: 600;
-  color: rgb(34, 34, 34);
+  color: white;
+}
+
+.account-btn {
+  font-size: 16pt;
+  color: white;
+  background-color: #ff9900;
+  padding: 5px 20px;
+  border-radius: 50px;
+  font-weight: bold;
+}
+
+.account-btn:hover {
+  text-decoration: none;
+  transform: scale(1.1);
+  transition: 0.3s;
+  cursor: pointer;
 }
 
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { LOGIN, REQUEST_RESET_PASS } from "../AuthMode";
+import "../Auth.css";
 
 const Register = ({
     setMode,
@@ -65,7 +66,7 @@ const Register = ({
             />
           </div>                                                
           <div className="d-grid gap-2 mt-3">
-            <button type="submit" className="button-primary button-primary-green" onClick={handleRegister}>
+            <button type="submit" className="account-btn" onClick={handleRegister}>
               Register
             </button>
           </div>

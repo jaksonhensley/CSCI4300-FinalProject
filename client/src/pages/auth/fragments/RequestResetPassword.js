@@ -1,6 +1,7 @@
 import React from "react";
 
 import { LOGIN } from "../AuthMode";
+import "../Auth.css";
 
 const RequestResetPass = ({
     setMode, 
@@ -30,7 +31,7 @@ const RequestResetPass = ({
             />
           </div>                                                       
           <div className="d-grid gap-2 mt-3">
-            <button className="button-primary button-primary-green" onClick={handleRequestResetPass}>
+            <button className="account-btn" onClick={handleRequestResetPass}>
               Send Me a Link
             </button>
           </div>

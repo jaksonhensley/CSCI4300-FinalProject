@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Table } from "react-bootstrap";
 
+
 import { CUISINE, SIDE, DRINK, DESSERT } from "./MenuSectionType";
 import "../../shared/style/common.css";
 import "./Menu.css";
@@ -57,7 +58,7 @@ const Menu = ({items, cart, menuSectionType}) => {
             {!cartContainsItem(item) && 
               <button 
                 onClick={() => addToCart(item)}
-                className="button-primary button-primary-green">
+                className="add-to-cart">
                 <span>Add to Cart</span>
               </button>
             }    

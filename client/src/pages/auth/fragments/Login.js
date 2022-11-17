@@ -1,6 +1,7 @@
 import React from "react";
 
 import { REGISTER, REQUEST_RESET_PASS } from "../AuthMode";
+import "../Auth.css";
 
 const Login = ({
     setMode, 
@@ -44,7 +45,7 @@ const Login = ({
             </label>
           </div>      
           <div className="text-center mt-3">
-            <button type="submit" className="button-primary button-primary-green" onClick={handleLogin}>
+            <button type="submit" className="account-btn" onClick={handleLogin}>
               Login
             </button>
           </div>      
