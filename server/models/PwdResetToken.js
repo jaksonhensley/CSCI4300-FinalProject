@@ -7,9 +7,9 @@ const PwdResetTokenSchema = new Schema({
   },
   userId: {
     type: Schema.Types.ObjectId,
-    ref: "User",
+    ref: "User"
   }
 });
 
 const PwdResetToken = model("PwdResetToken", PwdResetTokenSchema);
-module.exports = PwdResetToken;
+module.exports = { PwdResetToken };

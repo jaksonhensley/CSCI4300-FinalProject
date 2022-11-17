@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/User");
+const { User } = require("../models/User");
 const bcrypt = require("bcryptjs");
 const validateRegisterInput = require("../validation/RegisterValidation");
 const jwt = require("jsonwebtoken");
@@ -108,6 +108,20 @@ router.post("/login", async (req, resp) => {
 // @access    Private
 router.get("/current", requiresAuth, (req, resp) => {
   return resp.json(req.user);
+});
+
+// @route   PUT /auth/logout
+// @desc    Logout user and clear cookies
+// @access  Private
+router.put("/logout", requiresAuth, async (req, res) => {
+  try {
+    res.clearCookie("access-token");
+
+    return res.json({ success: true });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send(err.message);
+  }
 });
 
 module.exports = router;
