@@ -3,12 +3,7 @@ const router = express.Router();
 const requiresAuth = require("../middleware/Permissions");
 const { Item } = require("../models/Item");
 
-router.get("/test", requiresAuth, (req, resp) => {
-  console.log(req.user._id);
-  resp.send("Item's route working");
-});
-
-// @route    GET /items
+// @route    GET /items/:itemType? (optional itemType param)
 // @desc     Get all items matching the type
 // @access   Public
 router.get("/:itemType?", async (req, resp) => {

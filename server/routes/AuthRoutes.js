@@ -6,7 +6,7 @@ const validateRegisterInput = require("../validation/RegisterValidation");
 const jwt = require("jsonwebtoken");
 const requiresAuth = require("../middleware/Permissions");
 
-// @route     GET / auth/register
+// @route     POST /api/auth/register
 // @desc      Register new user account
 // @access    Public
 router.post("/register", async (req, resp) => {
@@ -38,7 +38,8 @@ router.post("/register", async (req, resp) => {
     // create new user
     const newUser = new User({     
       email: req.body.email,
-      password: hashPassword
+      password: hashPassword,
+      validated: false
     });
 
     // save user to db
@@ -54,18 +55,58 @@ router.post("/register", async (req, resp) => {
   }
 });
 
-// @route     POST /auth/login
+// @route     GET /api/auth/validate/:id
+// @desc      Validate newly registered user
+// @access    Public
+router.put("/validate/:id", async (req, resp) => {
+  try {  
+    if (!req.params.id) {
+      return resp.status(400).json({
+        error: "No id provided"
+      });
+    }  
+
+    // check if user exists
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return resp.status(400).json({
+        error: "No user found with the specified id"
+      });
+    }    
+
+    // update user validated field
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, {
+      validated: true
+    }, {
+      new: true
+    });
+
+    // return user json obj without password
+    const userToReturn = { ...updatedUser._doc }
+    delete userToReturn.password;
+    return resp.json(userToReturn);
+  } catch (err) {
+    return resp.status(500).send(err.message);
+  }
+});
+
+// @route     POST /api/auth/login
 // @desc      Login user and return access token
 // @access    Public
 router.post("/login", async (req, resp) => {
   try {
-    // check if user exists
+    // check if user exists and is validated
     const user = await User.findOne({
       email: new RegExp("^" + req.body.email + "$", "i")
     });
     if (!user) {
       return resp.status(400).json({ 
         error: "Unable to login. Invalid username or password." 
+      });
+    }
+    if (!user.validated) {
+      return resp.status(400).json({
+        error: "Unable to login. Please validate your account before attempting to login."
       });
     }
 
@@ -77,22 +118,22 @@ router.post("/login", async (req, resp) => {
       });
     }
 
+    // create session cookie
     const payload = {
       userId: user._id
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "7d"
     });
-
     resp.cookie("access-token", token, {    
       expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       httpOnly: true,
       secure: process.env.NODE_ENV === "production"
     });
 
+    // remove password from json user info
     const userToReturn = {...user._doc };
     delete userToReturn.password;
-
     return resp.json({
       token: token,
       user: userToReturn
@@ -103,24 +144,25 @@ router.post("/login", async (req, resp) => {
   }
 });
 
-// @route     GET /auth/current
+// @route     GET /api/auth/current
 // @desc      Return the currently authorized user
 // @access    Private
 router.get("/current", requiresAuth, (req, resp) => {
   return resp.json(req.user);
 });
 
-// @route   PUT /auth/logout
+// @route   PUT /api/auth/logout
 // @desc    Logout user and clear cookies
 // @access  Private
-router.put("/logout", requiresAuth, async (req, res) => {
+router.put("/logout", requiresAuth, async (req, resp) => {
   try {
-    res.clearCookie("access-token");
-
-    return res.json({ success: true });
+    resp.clearCookie("access-token");
+    return resp.json({ 
+      success: true 
+    });
   } catch (err) {
     console.log(err);
-    return res.status(500).send(err.message);
+    return resp.status(500).send(err.message);
   }
 });
 

@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 // import routes
 const AuthRoutes = require("./routes/AuthRoutes");
 const ItemRoutes = require("./routes/ItemRoutes");
+const CartRoutes = require("./routes/CartRoutes");
 
 const App = express();
 
@@ -16,11 +17,21 @@ App.use(express.urlencoded({
 App.use(cookieParser());
 
 // set app routes
-App.use("/auth", AuthRoutes);
-App.use("/items", ItemRoutes);
+App.use("/api/auth", AuthRoutes);
+App.use("/api/items", ItemRoutes);
+App.use("/api/cart", CartRoutes);
+
+let database;
+if (process.env.ENV_TYPE === "test") {
+  console.log("Connecting to test db");
+  database = process.env.DB_LOCAL;
+} else {
+  console.log("Connecting to prod db");
+  database = process.env.DB_URI;
+}
 
 mongoose
-  .connect(process.env.DB_URI, {
+  .connect(database, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   }).then(() => {

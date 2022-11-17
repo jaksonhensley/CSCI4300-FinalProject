@@ -8,8 +8,17 @@ const { Item } = require("../models/Item");
 const { CartItem}  = require("../models/CartItem");
 const { PwdResetToken } = require("../models/PwdResetToken");
 
+let database;
+if (process.env.ENV_TYPE === "test") {
+  console.log("Connecting to test db");
+  database = process.env.DB_LOCAL;
+} else {
+  console.log("Connecting to prod db");
+  database = process.env.DB_URI;
+}
+
 mongoose
-  .connect(process.env.DB_URI, {
+  .connect(database, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   }).then(() => {
@@ -19,12 +28,12 @@ mongoose
   });
 
 const createSeedUsers = async () => {
-  const hashedPassword1 = await bcrypt.hash("password123?1", 12);
+  const hashedPassword1 = await bcrypt.hash("password123?!", 12);
   return [
     {
       email: "johnmichaellavender123@gmail.com",
       password: hashedPassword1,
-      validated: true
+      validated: false
     }
   ];
 };
@@ -85,7 +94,7 @@ const createSeedItems = async () => {
 const seedDB = async () => {
   const seedUsers = await createSeedUsers();
   const seedItems = await createSeedItems();
-  
+
   await PwdResetToken.deleteMany({});
   await CartItem.deleteMany({});
   await User.deleteMany({});
