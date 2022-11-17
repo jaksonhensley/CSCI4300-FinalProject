@@ -20,14 +20,11 @@
   width: 80%;
   height: 450px;
   margin-top: 5%;
-  
 }
 
 .home-carousel-img-container img {
   margin: auto;
-  margin-top: 25px;
-  max-width: 500px;
-  max-height: 400px;
-  width: auto;
-  height: auto;
+  width: 500px;
+  height: 440px;
+  object-fit: contain;
 }

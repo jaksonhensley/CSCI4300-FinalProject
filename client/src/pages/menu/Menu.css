@@ -11,7 +11,7 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  width: fill;
+  width: stretch;
   height: 80px;
   align-items: center;
   background-color: rgb(18, 18, 18);
