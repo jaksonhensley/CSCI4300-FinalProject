@@ -1,7 +1,7 @@
-const CUISINE = "Cuisine";
-const SIDE = "Side";
-const DESSERT = "Dessert";
-const DRINK = "Drink";
+const CUISINE = "CUISINE";
+const SIDE = "SIDE";
+const DESSERT = "DESSERT";
+const DRINK = "DRINK";
 
 module.exports = {
   CUISINE: CUISINE,

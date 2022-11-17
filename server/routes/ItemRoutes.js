@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const requiresAuth = require("../middleware/Permissions");
-const Item = require("../models/Item");
+const { Item } = require("../models/Item");
 
 router.get("/test", requiresAuth, (req, resp) => {
   console.log(req.user._id);
@@ -13,11 +13,12 @@ router.get("/test", requiresAuth, (req, resp) => {
 // @access   Public
 router.get("/:itemType?", async (req, resp) => {
   try {
-    let itemType = req.params.itemType;
+    let itemTypeParam = req.params.itemType;
     let items;
-    if (!itemType) {
+    if (!itemTypeParam) {
       items = await Item.find({});
     } else {
+      let itemType = itemTypeParam.toUpperCase();
       items = await Item.find({
         itemType: itemType
       });
