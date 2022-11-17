@@ -36,37 +36,39 @@ const Cart = ({items, cart}) => {
     return (
       <tr key={item.id}>
         <td className="cell">
-          <div className="cart-item-container">
-          <div className="item-info-container">
           <h1 className="item-title">{item.itemName}</h1>
+          <img className="item-img" src={item.imgSrc} alt=""/>
           <h3 className="item-type">{item.itemType}</h3>
-          <img className="cart-img" src={item.imgSrc} alt=""/>
-          </div>
-          <div className="item-btn-container">
-          <div className="qty-container">
-            <button 
-              onClick={() => changeCartItemCounter(cartItem, -1)} 
-              className={cartItem.counter === 1 ? "item-btn item-btn-grey" : "item-btn item-btn-red"}>
-              -
-            </button>
-            <h1 className="counter">
-              {cartItem.counter}
-            </h1>
-            <button
-              onClick={() => changeCartItemCounter(cartItem, 1)} 
-              className={cartItem.counter === 9 ? "item-btn item-btn-grey" : "item-btn item-btn-green"}>
-              +
-            </button>                               
-            </div>
-            <div className="cost-container">
-            <span className="total-cost">${totalCost}</span>
-            <div className="remove-btn-container">
+            <Table striped bordered hover size="sm">
+              <tbody>
+                <tr>
+                  <td>
+                    <button 
+                      onClick={() => changeCartItemCounter(cartItem, -1)} 
+                      className={cartItem.counter === 1 ? "item-btn item-btn-grey" : "item-btn item-btn-red"}>
+                      -
+                    </button>
+                  </td>                 
+                  <td>
+                    <h1 className="text-center">
+                      {cartItem.counter}
+                    </h1>
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => changeCartItemCounter(cartItem, 1)} 
+                      className={cartItem.counter === 9 ? "item-btn item-btn-grey" : "item-btn item-btn-green"}>
+                      +
+                    </button>                               
+                  </td>
+                </tr>
+              </tbody>
+            </Table>           
+          <span className="item-title">${totalCost}</span>
+          <div className="remove-btn-container">
             <span className="button-primary button-primary-red">
               Remove Item
             </span>
-            </div>
-          </div>
-          </div>
           </div>
         </td>
       </tr>
@@ -77,7 +79,7 @@ const Cart = ({items, cart}) => {
     <div className="cart-page-body">
     <div className="cart-container">    
       <div className="cart-table-container">
-        <Table borderless>
+        <Table striped bordered hover>
           <thead>
             <th className="text-center cart-heading">Shopping Cart</th>         
           </thead>

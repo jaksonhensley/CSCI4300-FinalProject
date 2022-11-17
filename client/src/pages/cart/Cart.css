@@ -2,7 +2,7 @@
   height: 100%;  
   width: 100%;  
   margin: auto;
-  background-color: black;
+  background-color: gray;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -13,14 +13,11 @@
   justify-content: center;
   width: 50%;
   margin: auto;
-  background: rgb(18, 18, 18);
-  border-radius: 15px;
-  margin-top: 20px;
 }
 
 .cell {
-  text-align: left;
-  margin-left: 50px;
+  text-align: center;  
+  margin: auto;
 }
 
 .about {
@@ -40,69 +37,30 @@
 
 .cart-heading {
   font-size: 75px;
+  font-family: ‘Open Sans’;
   font-weight: 700;
   color: white;
-  background: #ff9900;
-  border-radius: 15px 15px 0 0;
-}
-
-.cart-item-container {
-  display: flex;
-  flex-direction: row;
-}
-
-.item-info-container {
-  display: flex;
-  flex-direction: column;
 }
 
 .item-title {
   font-weight: bold;
   font-size: 36px;
-  margin-bottom: -5px;
 }
 
 .item-type {
   font-style: italic;
-  color: gray;
-}
-
-.cart-img {
-  display: inline;
-  align-self: left;
-  width: 200px;
-  height: auto;
-}
-
-.item-btn-container {
-  display: flex;
-  flex-direction: row;
-  margin: auto 50px auto auto;
-}
-
-.qty-container {
-  display: flex;
-  flex-direction: row;
-  margin-left: auto;
-  margin-right: 120px;
-}
-
-.cost-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .item-btn {
   width: 70px;
-	height: 70px;
+	height: 80px;
 	border-radius: 50%;	
 	justify-content: center;
 	align-items: center;
 	font-size: 30px;
 	font-family: 'Open Sans';
 	font-weight: 900;
-	color: white;
+	color: black;
 	cursor: pointer;
 }
 
@@ -113,17 +71,14 @@
 
 .item-btn-red {
   background-color: red;
-  margin: auto;
 }
 
 .item-btn-green {
   background-color: green;
-  margin: auto;
 }
 
 .item-btn-grey {
   background-color: grey;
-  margin: auto;
 }
 
 .item-btn-grey:hover {
@@ -135,25 +90,17 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-  color: white;
-  margin: auto 20px;
-}
-
-.total-cost {
-  color: white;
-  font-weight: bold;
-  font-size: 36px;
 }
 
 .remove-btn-container {
-	margin: 30px 0px 10px auto;
+	margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .confirm-order-container {
   display: flex;
   justify-content: center;
   margin-bottom: 50px;
-  margin-top: 20px;
 }
 
 .confirm-order {
