@@ -3,16 +3,16 @@ import { LOGIN, REQUEST_RESET_PASS } from "../AuthMode";
 import "../Auth.css";
 
 const Register = ({
-    setMode,
-    username,
-    setUsername,
+    setMode,   
     email,
     setEmail,
     password,
     setPassword,
     confirmPassword,
     setConfirmPassword,
-    handleRegister,
+    handleSubmit,
+    errors,
+    loading
   }) => {
   return (
     <div className="login-container">
@@ -24,17 +24,7 @@ const Register = ({
             <span className="link-primary" onClick={() => setMode(LOGIN)}>
               Login
             </span>
-          </div>
-          <div className="form-group mt-3">
-            <label>Username</label>
-            <input
-              type="text"
-              value={username}
-              className="form-control mt-1"
-              placeholder="Enter the username you want..."
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
+          </div>        
           <div className="form-group mt-3">
             <label>Email address</label>
             <input
@@ -44,6 +34,10 @@ const Register = ({
               placeholder="Email address..."
               onChange={(e) => setEmail(e.target.value)}
             />
+            {
+              errors.email &&
+              <p className="error">{errors.email}</p>              
+            }
           </div>
           <div className="form-group mt-3">
             <label>Password</label>
@@ -55,6 +49,10 @@ const Register = ({
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+          {
+            errors.password &&
+            <p className="error">{errors.password}</p>
+          }
           <div className="form-group mt-3">
             <label>Confirm Password</label>
             <input 
@@ -64,9 +62,13 @@ const Register = ({
               placeholder="Confirm password..."
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
+            {
+              errors.confirmPassword && 
+              <p className="error">{errors.confirmPassword}</p>
+            }
           </div>                                                
           <div className="d-grid gap-2 mt-3">
-            <button type="submit" className="account-btn" onClick={handleRegister}>
+            <button type="submit" className="account-btn" disabled={loading} onClick={handleSubmit}>
               Register
             </button>
           </div>

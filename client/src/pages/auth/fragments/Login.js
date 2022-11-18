@@ -5,11 +5,13 @@ import "../Auth.css";
 
 const Login = ({
     setMode, 
-    username, 
-    setUsername, 
+    email, 
+    setEmail, 
     password, 
     setPassword, 
-    handleLogin
+    handleSubmit,
+    errors,
+    loading
   }) => {
   return (
     <div className="login-container">
@@ -22,15 +24,15 @@ const Login = ({
           </div>
           <div className="text-center form-group mt-3">
             <label>
-              Username
+              Email
               <input 
                 type="text" 
-                value={username} 
+                value={email} 
                 className="form-control mt-1"
-                placeholder="Enter your username..."
-                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter your email..."
+                onChange={(e) => setEmail(e.target.value)}
               />
-            </label>
+            </label>           
           </div>
           <div className="text-center form-group mt-3">
             <label>
@@ -45,7 +47,7 @@ const Login = ({
             </label>
           </div>      
           <div className="text-center mt-3">
-            <button type="submit" className="account-btn" onClick={handleLogin}>
+            <button type="submit" className="account-btn" disabled={loading} onClick={handleSubmit}>
               Login
             </button>
           </div>      
@@ -53,6 +55,13 @@ const Login = ({
             <p className="text-center mt-2">
               Forgot <span className="link-primary" onClick={() => setMode(REQUEST_RESET_PASS)}>password?</span>
             </p>
+            {
+              errors.error &&
+              <div>
+                <hr/>
+                <p className="error">{errors.error}</p>
+              </div>
+            }            
           </div>       
         </div>
       </form>

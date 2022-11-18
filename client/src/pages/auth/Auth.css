@@ -50,5 +50,8 @@ label {
   cursor: pointer;
 }
 
+.error {
+  color: red;
+}
 
 

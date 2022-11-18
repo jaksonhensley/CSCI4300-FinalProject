@@ -61,6 +61,7 @@ router.post("/register", async (req, resp) => {
 router.put("/validate/:id", async (req, resp) => {
   try {  
     if (!req.params.id) {
+      console.log("No id provided");
       return resp.status(400).json({
         error: "No id provided"
       });
@@ -69,6 +70,7 @@ router.put("/validate/:id", async (req, resp) => {
     // check if user exists
     const user = await User.findById(req.params.id);
     if (!user) {
+      console.log("No user found with the specified id");
       return resp.status(400).json({
         error: "No user found with the specified id"
       });
@@ -95,16 +97,19 @@ router.put("/validate/:id", async (req, resp) => {
 // @access    Public
 router.post("/login", async (req, resp) => {
   try {
+    console.log("Posting login");
     // check if user exists and is validated
     const user = await User.findOne({
       email: new RegExp("^" + req.body.email + "$", "i")
     });
     if (!user) {
+      console.log("User not found");
       return resp.status(400).json({ 
         error: "Unable to login. Invalid username or password." 
       });
     }
     if (!user.validated) {
+      console.log("User not validated");
       return resp.status(400).json({
         error: "Unable to login. Please validate your account before attempting to login."
       });
@@ -113,6 +118,7 @@ router.post("/login", async (req, resp) => {
     // check passwords match
     const passwordMatch = await bcrypt.compare(req.body.password, user.password);
     if (!passwordMatch) {
+      console.log("Passwords don't match");
       return resp.status(400).json({
         error: "Unable to login. Invalid username or password." 
       });
@@ -128,7 +134,7 @@ router.post("/login", async (req, resp) => {
     resp.cookie("access-token", token, {    
       expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production"
+      secure: process.env.NODE_ENV === "prod"
     });
 
     // remove password from json user info
@@ -138,6 +144,30 @@ router.post("/login", async (req, resp) => {
       token: token,
       user: userToReturn
     });
+  } catch (err) {
+    console.log(err);
+    return resp.status(500).send(err.message);
+  }
+});
+
+// @route     POST /api/auth/request-reset-pass
+// @desc      User submits request to reset password
+// @access    Public
+router.get("/request-reset-password", async (req, resp) => {
+  try {
+      // check if user exists
+    const userExists = await User.exists({
+      email: req.body.email
+    });
+    if (!userExists) {
+      return resp.status(400).json({
+        error: "No user found with the specified email"
+      });
+    }        
+
+    // TODO: Send email to user here
+
+    return resp.message("Sent reset link to email");
   } catch (err) {
     console.log(err);
     return resp.status(500).send(err.message);

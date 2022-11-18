@@ -1,9 +1,21 @@
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useGlobalContext } from "../../shared/context/GlobalContext";
 import { Table, Button } from "react-bootstrap";
 
 import "./Account.css";
 import "../../shared/style/common.css";
 
 const Account = () => {
+  const { user } = useGlobalContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user && navigate) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
+
   const userId = 1;
   const email = "johndoe@email.com";
   const username = "johnnybravo69";

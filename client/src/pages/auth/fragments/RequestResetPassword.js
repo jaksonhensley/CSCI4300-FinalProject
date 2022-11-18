@@ -7,7 +7,9 @@ const RequestResetPass = ({
     setMode, 
     email, 
     setEmail, 
-    handleRequestResetPass
+    handleSubmit,
+    errors,
+    loading
   }) => {
   return (
     <div className="login-container">
@@ -31,7 +33,7 @@ const RequestResetPass = ({
             />
           </div>                                                       
           <div className="d-grid gap-2 mt-3">
-            <button className="account-btn" onClick={handleRequestResetPass}>
+            <button className="account-btn" disabled={loading} onClick={handleSubmit}>
               Send Me a Link
             </button>
           </div>

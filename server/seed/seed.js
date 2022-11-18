@@ -33,7 +33,7 @@ const createSeedUsers = async () => {
     {
       email: "johnmichaellavender123@gmail.com",
       password: hashedPassword1,
-      validated: false
+      validated: true
     }
   ];
 };

@@ -1,7 +1,9 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 
 // import routes
 const AuthRoutes = require("./routes/AuthRoutes");
@@ -14,7 +16,9 @@ App.use(express.json());
 App.use(express.urlencoded({
   extended: true
 }));
+App.use(cors());
 App.use(cookieParser());
+App.set(express.static(path.join(__dirname, 'public')));
 
 // set app routes
 App.use("/api/auth", AuthRoutes);

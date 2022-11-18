@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+import { useGlobalContext } from "../../shared/context/GlobalContext";
 
 import Login from "./fragments/Login";
 import Register from "./fragments/Register";
@@ -8,72 +12,105 @@ import { LOGIN, REQUEST_RESET_PASS, REGISTER } from "./AuthMode";
 import "./Auth.css";
 import "../../shared/style/common.css";
 
-const Auth = ({authmode}) => {
-  const [mode, setMode] = useState(authmode);
+const Auth = ({modeProp}) => {
+  const { getCurrentUser, user } = useGlobalContext();
+  const [mode, setMode] = useState(modeProp);
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const resetAll = () => {
-    setEmail("");
-    setUsername("");
-    setPassword("");
-    setConfirmPassword("");
-  };
+  useEffect(() => {
+    if (user && navigate) {
+      navigate("/account");
+    }
+  }, [user, navigate]);
 
-  const handleLogin = (e) => {
-    console.log("Clicked login button");
-    resetAll();
-    e.preventDefault();
-  };
+  const handleSubmit = async (e) => { 
+    e.preventDefault();  
+    setLoading(true);      
 
-  const handleRegister = (e) => {
-    console.log("Clicked register button");
-    resetAll();
-    e.preventDefault();
-  };
+    let data = {};
+    let url = "/api/auth/";
 
-  const handleRequestResetPass = (e) => {
-    console.log("Clicked button to request a password reset token");
-    resetAll();
-    e.preventDefault();
+    console.log("Email: " + email);
+    console.log("Password: " + password);
+
+    if (mode === LOGIN) {
+      data = {
+        email,
+        password
+      };  
+      url += "login";      
+    } else if (mode === REGISTER) {
+      data = {
+        email,
+        password,
+        confirmPassword
+      };
+      url += "register";
+    } else if (mode === REQUEST_RESET_PASS) {
+      data = {
+        email
+      };
+      url += "request-reset-pass";
+    }
+
+    console.log("Auth url: " + url);
+
+    await axios.post(url, data)
+    .then(() => {
+      getCurrentUser();
+    })
+    .catch((err) => {
+      setLoading(false);
+
+      if (err?.response?.data) {
+        setErrors(err.response.data);
+      }
+    });
   };
 
   if (mode === LOGIN) {
     return <Login
         setMode={setMode}
-        username={username}
-        setUsername={setUsername}
+        email={email}
+        setEmail={setEmail}
         password={password}
         setPassword={setPassword}
-        handleLogin={handleLogin}
+        handleSubmit={handleSubmit}
+        errors={errors}
+        loading={loading}
       />;
   } else if (mode === REGISTER) {
     return <Register
-        setMode={setMode}
-        username={username}
-        setUsername={setUsername}
+        setMode={setMode}    
         email={email}
         setEmail={setEmail}
         password={password}
         setPassword={setPassword}
         confirmPassword={confirmPassword}
         setConfirmPassword={setConfirmPassword}
-        handleRegister={handleRegister}
+        handleSubmit={handleSubmit}
+        errors={errors}
+        loading={loading}
       />;
   } else if (mode === REQUEST_RESET_PASS) {
     return <RequestResetPass
         setMode={setMode}
         email={email}
         setEmail={setEmail}
-        handleRequestResetPass={handleRequestResetPass}
+        handleSubmit={handleSubmit}
+        errors={errors}
+        loading={loading}
       />;
   } 
 };
 
 Auth.defaultProps = {
-  authmode: LOGIN
+  modeProp: LOGIN
 };
 
 export default Auth;

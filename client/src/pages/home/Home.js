@@ -35,7 +35,7 @@ const Home = () => {
 
   const renderedCarouselItems = carouselItems.map((carouselItem) => {
     return (
-      <Carousel.Item>
+      <Carousel.Item key={carouselItem.title}>
         <div className="home-carousel-img-container">
           <img  
             className="d-block w-100"

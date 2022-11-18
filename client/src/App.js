@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -14,24 +14,14 @@ import DoResetPwd from "./pages/reset-pwd/DoResetPwd";
 import Auth from "./pages/auth/Auth";
 import Menu from "./pages/menu/Menu";
 import Cart from "./pages/cart/Cart";
+import Loading from "./shared/components/loading/Loading";
 
 import { LOGIN, REGISTER, REQUEST_RESET_PASS } from "./pages/auth/AuthMode";
 import { CUISINE, SIDE, DRINK, DESSERT } from "./pages/menu/MenuSectionType";
-import AuthContext from "./shared/context/AuthContext";
+import { GlobalProvider } from "./shared/context/GlobalContext";
+import { useGlobalContext } from "./shared/context/GlobalContext";
 
-const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const doLogin = useCallback(() => {
-    setIsLoggedIn(true);
-  }, []);
-
-  const doLogout = useCallback(() => {
-    setIsLoggedIn(false);
-  }, []);
-
-  
-
+const App = () => {    
   const tempUsers = [
     {
       id: 1,
@@ -163,32 +153,32 @@ const App = () => {
       <Route 
         path="/login" 
         element={ 
-          <Auth authmode={LOGIN}/> 
+          <Auth modeProp={LOGIN}/> 
         }
       />
       <Route 
         path="/register" 
         element={ 
-          <Auth authmode={REGISTER}/> 
+          <Auth modeProp={REGISTER}/> 
         }
       />            
       <Route 
         path="/request-reset-pass" 
         element={ 
-          <Auth authmode={REQUEST_RESET_PASS}/>
+          <Auth modeProp={REQUEST_RESET_PASS}/>
         }
       />
       <Route 
         path="/do-reset-pass/:userIdParam/:codeParam" 
         element={ 
-          <DoResetPwd users={tempUsers} tokens={tempPwdResetTokens}/> 
+          <DoResetPwd users={tempUsers} tokens={tempPwdResetTokens} exact/> 
         } 
         exact
       />
       <Route 
         path="/account" 
         element={ 
-          isLoggedIn ? <Account/> : <Navigate to="/login"/> 
+          <Account/>
         }
       />
       <Route 
@@ -212,15 +202,17 @@ const App = () => {
     </Routes>
   );
 
-  return (
-    <AuthContext.Provider
-      value={{ isLoggedIn: isLoggedIn, login: doLogin, logout: doLogout}} 
-    >
-      <Router>     
+  const { fetchingUser } = useGlobalContext();  
+  return  (
+    <GlobalProvider>
+      { fetchingUser ?
+        <Router>
           <NavBar/>
           {routes}
-      </Router>
-    </AuthContext.Provider>
+        </Router>
+      :
+      <Loading/> }
+    </GlobalProvider>  
   )
 }
 
