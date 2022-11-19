@@ -98,7 +98,7 @@ const seedDB = async () => {
   await PwdResetToken.deleteMany({});
   await CartItem.deleteMany({});
   await User.deleteMany({});
-  await User.insertMany(seedUsers);
+  // await User.insertMany(seedUsers);
   await Item.deleteMany({});
   await Item.insertMany(seedItems);
 };

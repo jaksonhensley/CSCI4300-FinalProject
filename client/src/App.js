@@ -10,18 +10,22 @@ import NavBar from "./shared/components/nav/NavBar";
 import Home from "./pages/home/Home";
 import About from "./pages/about/About";
 import Account from "./pages/account/Account";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import RequestResetPass from "./pages/auth/RequestResetPassword";
 import DoResetPwd from "./pages/reset-pwd/DoResetPwd";
-import Auth from "./pages/auth/Auth";
 import Menu from "./pages/menu/Menu";
 import Cart from "./pages/cart/Cart";
 import Loading from "./shared/components/loading/Loading";
+import Success from "./shared/components/success/Success";
 
-import { LOGIN, REGISTER, REQUEST_RESET_PASS } from "./pages/auth/AuthMode";
 import { CUISINE, SIDE, DRINK, DESSERT } from "./pages/menu/MenuSectionType";
 import { GlobalProvider } from "./shared/context/GlobalContext";
 import { useGlobalContext } from "./shared/context/GlobalContext";
+import PrivateRoute from "./shared/components/PrivateRoute";
 
-const App = () => {    
+const App = () => {
+
   const tempUsers = [
     {
       id: 1,
@@ -153,50 +157,69 @@ const App = () => {
       <Route 
         path="/login" 
         element={ 
-          <Auth modeProp={LOGIN}/> 
+          <Login/> 
         }
       />
       <Route 
         path="/register" 
         element={ 
-          <Auth modeProp={REGISTER}/> 
+          <Register/> 
         }
-      />            
+        exact
+      />      
       <Route 
         path="/request-reset-pass" 
         element={ 
-          <Auth modeProp={REQUEST_RESET_PASS}/>
+          <RequestResetPass/>
         }
       />
       <Route 
         path="/do-reset-pass/:userIdParam/:codeParam" 
         element={ 
-          <DoResetPwd users={tempUsers} tokens={tempPwdResetTokens} exact/> 
+          <DoResetPwd 
+            users={tempUsers} 
+            tokens={tempPwdResetTokens} 
+            exact/> 
         } 
         exact
       />
       <Route 
         path="/account" 
         element={ 
-          <Account/>
+          <PrivateRoute
+            redirect={"/login"}>
+            <Account/>
+          </PrivateRoute>        
         }
       />
       <Route 
         path="/menu" 
         element={
-          <Menu items={tempItems} cart={tempCart}/> 
+          <Menu 
+            items={tempItems} 
+            cart={tempCart}/> 
         }
       />
       <Route 
         path="/cart" 
         element={ 
-          <Cart items={tempItems} cart={tempCart}/>
+          <Cart 
+            items={tempItems} 
+            cart={tempCart}/>
         } 
+      />
+      <Route
+        path="/success"
+        element={
+          <Success/>        
+        }
       />
       <Route 
         path="*" 
         element={ 
-          <Navigate to="/" replace/>
+          <Navigate 
+            to="/" 
+            replace/>
         } 
       />
     </Routes>

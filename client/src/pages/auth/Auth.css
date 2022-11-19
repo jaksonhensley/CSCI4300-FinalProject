@@ -28,10 +28,10 @@
   font-weight: 800;
 }
 
-label {
+label .text {
   font-size: 14px;
-  font-weight: 600;
   color: white;
+  z-index: 5;
 }
 
 .account-btn {

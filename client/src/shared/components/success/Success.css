@@ -1,0 +1,17 @@
+.success {
+  font-size: xx-large;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: underline;
+  margin-bottom: 25px;
+}
+
+.success-container {
+  padding: 15px 15px 15px 15px;
+  margin: 20px auto auto auto;
+  width: 40%;
+  background-color: rgb(18, 18, 18);
+  border-radius: 20px;
+  color: white;
+}
+

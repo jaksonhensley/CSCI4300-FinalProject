@@ -18,6 +18,7 @@ router.post("/register", async (req, resp) => {
     } = validateRegisterInput(req.body);
     console.log("Is valid: " + isValid);
     if (!isValid) {
+      console.log(errs);
       return resp.status(400).json(errs);
     }
 
@@ -27,6 +28,7 @@ router.post("/register", async (req, resp) => {
     });
     console.log("Exists already by email: " + existsByEmail);
     if (existsByEmail) {
+      console.log("Already a user with email");
       return resp.status(400).json({
         error: "There is already a user with this email"
       });
@@ -48,6 +50,7 @@ router.post("/register", async (req, resp) => {
     // return user obj
     const userToReturn ={ ...savedUser._doc };
     delete userToReturn.password;
+    console.log(userToReturn);
     return resp.json(userToReturn);
   } catch (err) {
     console.log(err);
@@ -153,7 +156,7 @@ router.post("/login", async (req, resp) => {
 // @route     POST /api/auth/request-reset-pass
 // @desc      User submits request to reset password
 // @access    Public
-router.get("/request-reset-password", async (req, resp) => {
+router.post("/request-reset-password", async (req, resp) => {
   try {
       // check if user exists
     const userExists = await User.exists({
