@@ -56,7 +56,7 @@ router.post("/register", async (req, resp) => {
     const html = `
       <div>
         <h1>REGISTRATION VERIFICATION</h1>
-        <p>Please click the following link to verify your account, then you may login:</p>
+        <p>Please use the following link to verify your account, then you may login:</p>
         <div>
           <p>${verLink}</p>         
         </div>
