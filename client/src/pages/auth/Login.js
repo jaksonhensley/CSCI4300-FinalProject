@@ -16,11 +16,7 @@ const Login = () => {
   useEffect(() => {
     if (user && navigate) {
       console.log("User logged in, redirect to account");
-      navigate("/success", {
-        state: {
-          message: "You've been sent an email with further instructions before you can login"
-        }
-      });
+      navigate("/account");
     }
   }, [user, navigate]);
 
@@ -38,6 +34,7 @@ const Login = () => {
     })
     .catch((err) => {
       setLoading(false);
+      console.log(err);
       if (err?.response?.data) {
         setErrors(err.response.data);
       }

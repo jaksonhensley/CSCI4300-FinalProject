@@ -23,6 +23,7 @@ import { CUISINE, SIDE, DRINK, DESSERT } from "./pages/menu/MenuSectionType";
 import { GlobalProvider } from "./shared/context/GlobalContext";
 import { useGlobalContext } from "./shared/context/GlobalContext";
 import PrivateRoute from "./shared/components/PrivateRoute";
+import ValidateReg from "./pages/auth/ValidateReg";
 
 const App = () => {
 
@@ -166,7 +167,14 @@ const App = () => {
           <Register/> 
         }
         exact
-      />      
+      />     
+      <Route 
+        path="/validate/:userId" 
+        element={
+          <ValidateReg/>
+        }
+        exact        
+      />
       <Route 
         path="/request-reset-pass" 
         element={ 

@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const validateRegisterInput = require("../validation/RegisterValidation");
 const jwt = require("jsonwebtoken");
 const requiresAuth = require("../middleware/Permissions");
+const { sendMail } = require("../mailer/Mailer");
 
 // @route     POST /api/auth/register
 // @desc      Register new user account
@@ -34,18 +35,44 @@ router.post("/register", async (req, resp) => {
       });
     }
 
-    // encrypt the password
-    const hashPassword = await bcrypt.hash(req.body.password, 12);
-
+     // encrypt the password
+    const hashPassword = await bcrypt.hash(req.body.password, 12);    
     // create new user
-    const newUser = new User({     
+    const newUser = new User({    
       email: req.body.email,
       password: hashPassword,
       validated: false
-    });
+    });   
 
-    // save user to db
+    // save user to db and create ver link
     const savedUser = await newUser.save();
+    const newUserId = savedUser._id;
+
+    // try to send email, return error if unsuccessful
+    const verLink = "localhost:3006/validate/" + newUserId;
+    const html = `
+      <div>
+        <h1>REGISTRATION VERIFICATION</h1>
+        <p>Please click the following link to verify your account, then you may login:</p>
+        <div>
+          <p>${verLink}</p>         
+        </div>
+      </div>
+    `;
+    const mailOptions = {
+      from: "corngrub42069@gmail.com",
+      to: req.body.email,
+      subject: "Test",
+      html: html
+    };
+    const [isErr, message] = sendMail(mailOptions)
+    if (isErr) {
+      User.findByIdAndDelete(newUserId);
+      return resp.json(400).json({
+        error: message
+      });      
+    }
+    console.log(message);   
 
     // return user obj
     const userToReturn ={ ...savedUser._doc };
@@ -58,20 +85,22 @@ router.post("/register", async (req, resp) => {
   }
 });
 
-// @route     GET /api/auth/validate/:id
+// @route     GET /api/auth/validate
 // @desc      Validate newly registered user
 // @access    Public
-router.put("/validate/:id", async (req, resp) => {
+router.put("/validate", async (req, resp) => {
   try {  
-    if (!req.params.id) {
+    console.log("Put validate");
+    if (!req.body.userId) {
       console.log("No id provided");
       return resp.status(400).json({
         error: "No id provided"
       });
     }  
 
+    console.log("Check if user exists");
     // check if user exists
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.body.userId);
     if (!user) {
       console.log("No user found with the specified id");
       return resp.status(400).json({
@@ -79,16 +108,19 @@ router.put("/validate/:id", async (req, resp) => {
       });
     }    
 
+    console.log("Update user validated field");
     // update user validated field
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, {
+    const updatedUser = await User.findByIdAndUpdate(req.body.userId, {
       validated: true
     }, {
       new: true
     });
 
+    console.log("Return user json obg");
     // return user json obj without password
     const userToReturn = { ...updatedUser._doc }
     delete userToReturn.password;
+    console.log(userToReturn);
     return resp.json(userToReturn);
   } catch (err) {
     return resp.status(500).send(err.message);

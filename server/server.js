@@ -9,7 +9,6 @@ const path = require("path");
 const AuthRoutes = require("./routes/AuthRoutes");
 const ItemRoutes = require("./routes/ItemRoutes");
 const CartRoutes = require("./routes/CartRoutes");
-const MailRoutes = require("./routes/MailRoutes");
 
 const App = express();
 
@@ -25,7 +24,6 @@ App.set(express.static(path.join(__dirname, 'public')));
 App.use("/api/auth", AuthRoutes);
 App.use("/api/items", ItemRoutes);
 App.use("/api/cart", CartRoutes);
-App.use("/api/mailer", MailRoutes);
 
 let database;
 if (process.env.ENV_TYPE === "test") {

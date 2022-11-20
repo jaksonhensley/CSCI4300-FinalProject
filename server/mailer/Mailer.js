@@ -1,18 +1,11 @@
 require("dotenv").config();
-const { response } = require("express");
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    // type: "OAuth",
     user: process.env.EMAIL_ADDR,
-    pass: process.env.EMAIL_PASS,
-    /*
-    clientId: process.env.OAUTH_CLIENT_ID,
-    clientSecret: process.env.OAUTH_CLIENT_SECRET,
-    refreshToken: process.env.OAUTH_REFRESH_TOKEN
-    */
+    pass: process.env.EMAIL_PASS, 
   }
 });
 
