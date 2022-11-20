@@ -14,7 +14,9 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user && navigate) {
+    console.log("Login component");
+    console.log("User: " + user);
+    if (user !== null && navigate) {
       console.log("User logged in, redirect to account");
       navigate("/account");
     }

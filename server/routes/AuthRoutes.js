@@ -4,8 +4,10 @@ const { User } = require("../models/User");
 const bcrypt = require("bcryptjs");
 const validateRegisterInput = require("../validation/RegisterValidation");
 const jwt = require("jsonwebtoken");
+const jwt_decode = require("jwt-decode");
 const requiresAuth = require("../middleware/Permissions");
 const { sendMail } = require("../mailer/Mailer");
+const { addHoursToDate } = require("../const/Funcs");
 
 // @route     POST /api/auth/register
 // @desc      Register new user account
@@ -41,7 +43,8 @@ router.post("/register", async (req, resp) => {
     const newUser = new User({    
       email: req.body.email,
       password: hashPassword,
-      validated: false
+      validated: false,
+      jwtToken: "NULL"
     });   
 
     // save user to db and create ver link
@@ -159,24 +162,40 @@ router.post("/login", async (req, resp) => {
       });
     }
 
-    // create session cookie
-    const payload = {
+    // create jwt token
+    const jwtToken = jwt.sign({
       userId: user._id
-    };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "7d"
+    }, process.env.JWT_SECRET, {
+      expiresIn: "2h"
     });
-    resp.cookie("access-token", token, {    
-      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+
+    // create expiration date
+    const jwtExpire = addHoursToDate(new Date(), 2);
+
+    // update fields in user
+    const updatedUser = await User.findByIdAndUpdate(user._id, {
+      jwtToken: jwtToken,
+      jwtExpire: jwtExpire
+    }, {
+      new: true
+    });    
+
+    // save token as cookie
+    resp.cookie("access-token", jwtToken, {    
+      expires: jwtExpire,
       httpOnly: true,
       secure: process.env.NODE_ENV === "prod"
     });
 
-    // remove password from json user info
-    const userToReturn = {...user._doc };
-    delete userToReturn.password;
+    console.log(typeof jwtToken);
+    let decoded = jwt_decode(jwtToken);
+    console.log(decoded);
+
+    // remove password from user doc and return user json
+    const userToReturn = { ...updatedUser._doc };
+    delete userToReturn.password;    
     return resp.json({
-      token: token,
+      jwtToken: jwtToken,
       user: userToReturn
     });
   } catch (err) {
@@ -221,10 +240,21 @@ router.get("/current", requiresAuth, (req, resp) => {
 // @access  Private
 router.put("/logout", requiresAuth, async (req, resp) => {
   try {
-    resp.clearCookie("access-token");
-    return resp.json({ 
-      success: true 
+    console.log("Logout route");
+    // remove token from user in db
+    const updatedUser = await User.findByIdAndUpdate(req.user._id, {
+      jwtToken: "NULL",
+      jwtExpire: undefined
+    }, {
+      new: true
     });
+    const userToReturn = { ...updatedUser._doc };
+    delete userToReturn.password;    
+    console.log(userToReturn);
+    
+    // clear cookie in browser
+    resp.clearCookie("access-token");
+    return resp.json(userToReturn); 
   } catch (err) {
     console.log(err);
     return resp.status(500).send(err.message);

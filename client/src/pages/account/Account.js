@@ -7,7 +7,7 @@ import "./Account.css";
 import "../../shared/style/common.css";
 
 const Account = () => {
-  const { user } = useGlobalContext();
+  const { user, logout } = useGlobalContext();
   const navigate = useNavigate();  
 
   useEffect(() => {
@@ -15,6 +15,19 @@ const Account = () => {
       navigate("/login");
     }
   }, [user, navigate]); 
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/success", {
+        state: {
+          message: "Successfully logged out"
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (  
     <div className="account-tables-container">
@@ -38,8 +51,15 @@ const Account = () => {
               <Button to="/reset-pass">
                 Reset Password
               </Button>  
-            </td>            
-          </tr>          
+            </td>    
+          </tr>      
+          <tr>
+            <td>
+              <button onClick={handleLogout}>
+                Logout
+              </button>
+            </td>
+          </tr>    
         </tbody>
       </Table>      
     </div>

@@ -12,6 +12,13 @@ const UserSchema = new Schema({
   validated: {
     type: Boolean,
     default: false
+  },
+  jwtToken: {
+    type: String,
+    default: "NULL"
+  },
+  jwtExpire: {
+    type: Date
   }
 });
 
