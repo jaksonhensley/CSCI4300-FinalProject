@@ -48,7 +48,7 @@ const Account = () => {
         <tbody>
           <tr>          
             <td>
-              <Button to="/reset-pass">
+              <Button to="/request-reset-pwd">
                 Reset Password
               </Button>  
             </td>    

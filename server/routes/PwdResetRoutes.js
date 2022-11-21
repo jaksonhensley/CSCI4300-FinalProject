@@ -36,7 +36,7 @@ router.post("/request-reset-pwd", async (req, resp) => {
     const savedPwdResetToken = await pwdResetToken.save();
 
     // create link and mail it
-    const changePassLink = "localhost:3006/do-reset-pass/"+ user._id + "/" + randomStr;
+    const changePassLink = "localhost:3006/reset-pwd/"+ user._id + "/" + randomStr;
     const html = `
       <div>
         <h1>CHANGE YOUR PASSWORD</h1>
@@ -73,7 +73,7 @@ router.post("/request-reset-pwd", async (req, resp) => {
 // @access    Public
 router.get("/reset-pwd-token-exists", async (req, resp) => {
   try {
-    console.log("Getting do reset password");
+    console.log("Check if pwd token exists");
 
     // get pwd reset token
     const pwdResetToken = await PwdResetToken.findOne({

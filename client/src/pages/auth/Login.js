@@ -88,8 +88,10 @@ const Login = () => {
           </div>      
           <div>
             <p className="text-center mt-2">
-              Forgot <span className="link-primary" onClick={() => navigate("/request-reset-pass")}>password?</span>
-            </p>
+              Forgot <span className="link-primary" onClick={() => navigate("/request-reset-pwd")}>password?</span>
+            </p>                      
+          </div>  
+          <div>
             {
               errors.error &&
               <div>
@@ -98,8 +100,8 @@ const Login = () => {
                   {errors.error}
                 </p>
               </div>
-            }            
-          </div>       
+            }
+          </div>     
         </div>
       </form>
     </div>   

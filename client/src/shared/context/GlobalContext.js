@@ -4,7 +4,7 @@ import axios from "axios";
 // initial state
 const initState = {
   user: null,
-  fetchingUser: true,
+  fetchingUser: false,
   cartItems: []
 };
 

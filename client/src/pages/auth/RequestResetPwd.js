@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import "./Auth.css";
 
-const RequestResetPass = () => {
+const RequestResetPwd = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -14,12 +14,13 @@ const RequestResetPass = () => {
     e.preventDefault();  
     setLoading(true);      
     console.log("Email: " + email);
-    await axios.post("/api/pwd/request-reset-pwd", { email })
+    await axios.post("/api/pwd/request-reset-pwd", { 
+      email 
+    })
     .then(() => {
-      let message = "An email has been sent to " + email + " with further steps for resetting your password.";
       navigate("/success", {
         state: {
-          message: message
+          message: "An email has been sent to " + email + " with further steps for resetting your password."
         }
       });
     })
@@ -59,7 +60,9 @@ const RequestResetPass = () => {
           <div className="d-grid gap-2 mt-3">
             <button className="account-btn" disabled={loading} onClick={handleSubmit}>
               Send Me a Link
-            </button>
+            </button>             
+          </div>
+          <div>
             {
               errors.error &&
               <div>
@@ -68,7 +71,7 @@ const RequestResetPass = () => {
                   {errors.error}
                 </p>
               </div>
-            }  
+            } 
           </div>
         </div>
       </form>
@@ -76,4 +79,4 @@ const RequestResetPass = () => {
   );
 };
 
-  export default RequestResetPass;
+  export default RequestResetPwd;

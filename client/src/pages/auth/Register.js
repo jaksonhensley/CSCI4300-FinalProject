@@ -120,18 +120,17 @@ const Register = () => {
           </div>
           <div>
             <p className="text-center mt-2">
-              Forgot <span className="link-primary" onClick={() => navigate("/request-reset-pass")}>password?</span>
-            </p>
+              Forgot <span className="link-primary" onClick={() => navigate("/request-reset-pwd")}>password?</span>
+            </p>            
+          </div>                
+          <div>
             {
               errors.error &&
-              <div>
-                <hr/>
-                <p className="error">
-                  {errors.error}
-                </p>
-              </div>
+              <p className="error">
+                {errors.error}
+              </p>
             }  
-          </div>                
+          </div>
         </div>
       </form>
     </div>

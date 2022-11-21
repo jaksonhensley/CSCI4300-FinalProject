@@ -12,8 +12,8 @@ import About from "./pages/about/About";
 import Account from "./pages/account/Account";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
-import RequestResetPass from "./pages/auth/RequestResetPassword";
-import DoResetPwd from "./pages/reset-pwd/DoResetPwd";
+import RequestResetPwd from "./pages/auth/RequestResetPwd";
+import ResetPwd from "./pages/reset-pwd/ResetPwd";
 import Menu from "./pages/menu/Menu";
 import Cart from "./pages/cart/Cart";
 import Loading from "./shared/components/loading/Loading";
@@ -141,15 +141,15 @@ const App = () => {
         exact        
       />
       <Route 
-        path="/request-reset-pass" 
+        path="/request-reset-pwd" 
         element={ 
-          <RequestResetPass/>
+          <RequestResetPwd/>
         }
       />
       <Route 
-        path="/do-reset-pass/:userId/:token" 
+        path="/reset-pwd/:userId/:token" 
         element={ 
-          <DoResetPwd/> 
+          <ResetPwd/> 
         } 
         exact
       />

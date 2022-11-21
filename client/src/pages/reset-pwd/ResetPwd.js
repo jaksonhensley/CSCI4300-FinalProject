@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 
 import ErrorModal from "../error/ErrorModal";
 
-import "./DoResetPwd.css";
+import "./ResetPwd.css";
 import "../../shared/style/common.css";
 import axios from "axios";
 
-const DoResetPwd = () => {
+const ResetPwd = () => {
   const [newPwd, setNewPwd] = useState("");
   const [newPwdConfirm, setNewPwdConfirm] = useState("");  
   const [errors, setErrors] = useState({});
@@ -23,49 +23,45 @@ const DoResetPwd = () => {
     console.log(userId);
     console.log(token);
     (async () => {
-      const { success } = await axios.get("/api/pwd/reset-pwd-token-exists", {
+      await axios.get("/api/pwd/reset-pwd-token-exists", {
         userId,
         token      
-      });
-
-      // success should be of type boolean
-      console.log(typeof data);
-      console.log(success);    
-
-      // if no success, then there is no password reset token with matching user id or token fields,
-      // in which case navigate to error page
-      if (!success) {
+      })
+      .catch((err) => {
+        console.log(err);
         console.log("Navigating to error page");
         navigate("/error", {
           state: {
-            message: "No password reset token found!"
+            message: "Failed to load page for resetting your password!"
           }
         });
-      }
+      });    
     })();
   }, [userId, token, navigate]);
 
   // Processes request to change password. If there are errors, then set the errors state. 
   // Otherwise, navigate to success page.
-  const handleChangeUserPwd = async (e) => {
+  const handleChangePwd = async (e) => {
     e.preventDefault();
     console.log("New pwd: " + newPwd);
     console.log("New pwd confirm: " + newPwdConfirm);
-
-    await axios.post("/api/pwd/do-reset-password", {
+    await axios.post("/api/pwd/reset-pwd", {
       userId: userId,
-      newPwd: newPwd,
-      newPwdConfirm: newPwdConfirm      
+      token: token,
+      password: newPwd,
+      confirmPassword: newPwdConfirm      
     })
     .then(() => {
+      console.log("Navigating to success page");
       navigate("/success", {
         state: {
           message: "Successfully changed password!"
         }
       });
     })
-    .catch((err) => {
-      setLoading(false);
+    .catch((err) => {      
+      setLoading(false);     
+      console.log("Errors");
       console.log(err);
       if (err?.response?.data) {
         setErrors(err.response.data);
@@ -84,7 +80,7 @@ const DoResetPwd = () => {
 
   return (
     <div className="container">
-      <div className="form">
+      <form className="form">
         <div className="form-content">
           <h3 className="form-title">Change Password</h3>
           <div className="text-center form-group mt-3">
@@ -115,14 +111,25 @@ const DoResetPwd = () => {
               type="submit" 
               className="button-primary button-primary-green" 
               disabled={loading}
-              onClick={(e) => handleChangeUserPwd(e)}>
+              onClick={(e) => handleChangePwd(e)}>
               Change Password
             </button>
           </div>
+          <div>
+            {
+              errors.error &&
+              <div>
+                <hr/>
+                <p className="error">
+                  {errors.error}
+                </p>
+              </div>
+            } 
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
 
-export default DoResetPwd;
+export default ResetPwd;
