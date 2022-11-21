@@ -18,6 +18,7 @@ import Menu from "./pages/menu/Menu";
 import Cart from "./pages/cart/Cart";
 import Loading from "./shared/components/loading/Loading";
 import Success from "./shared/components/success/Success";
+import Error from "./shared/components/error/Error";
 
 import { CUISINE, SIDE, DRINK, DESSERT } from "./pages/menu/MenuSectionType";
 import { GlobalProvider } from "./shared/context/GlobalContext";
@@ -25,43 +26,7 @@ import { useGlobalContext } from "./shared/context/GlobalContext";
 import PrivateRoute from "./shared/components/PrivateRoute";
 import ValidateReg from "./pages/auth/ValidateReg";
 
-const App = () => {
-
-  const tempUsers = [
-    {
-      id: 1,
-      email: "john@email.com",
-      username: "John",
-      password: "123"
-    },
-    {
-      id: 2,
-      email: "jackson@email.com",
-      username: "Jackson",
-      password: "123"
-    },
-    {
-      id: 3,
-      email: "jacob@email.com",
-      username: "Jacob",
-      password: "123"
-    }
-  ];
-
-  const tempPwdResetTokens = [
-    {
-      userId: 1,
-      code: "token1"
-    },
-    {
-      userId: 2,
-      code: "token2"
-    },
-    {
-      userId: 1,
-      code: "token3"
-    }
-  ];
+const App = () => {  
 
   const tempItems = [
     {
@@ -182,12 +147,9 @@ const App = () => {
         }
       />
       <Route 
-        path="/do-reset-pass/:userIdParam/:codeParam" 
+        path="/do-reset-pass/:userId/:token" 
         element={ 
-          <DoResetPwd 
-            users={tempUsers} 
-            tokens={tempPwdResetTokens} 
-            exact/> 
+          <DoResetPwd/> 
         } 
         exact
       />
@@ -222,12 +184,19 @@ const App = () => {
           <Success/>        
         }
       />
+      <Route
+        path="/error"
+        element={
+          <Error/>
+        }
+      />
       <Route 
         path="*" 
         element={ 
           <Navigate 
             to="/" 
-            replace/>
+            replace
+          />
         } 
       />
     </Routes>
@@ -236,13 +205,15 @@ const App = () => {
   const { fetchingUser } = useGlobalContext();  
   return  (
     <GlobalProvider>
-      { fetchingUser ?
-        <Router>
-          <NavBar/>
-          {routes}
-        </Router>
-      :
-      <Loading/> }
+      { 
+        fetchingUser ?
+          <Loading/>
+        :
+          <Router>
+            <NavBar/>
+            {routes}
+          </Router>
+      }
     </GlobalProvider>  
   )
 }

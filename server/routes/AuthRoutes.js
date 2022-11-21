@@ -1,13 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const { User } = require("../models/User");
 const bcrypt = require("bcryptjs");
-const validateRegisterInput = require("../validation/RegisterValidation");
 const jwt = require("jsonwebtoken");
 const jwt_decode = require("jwt-decode");
-const requiresAuth = require("../middleware/Permissions");
+
+const { requiresAuth } = require("../middleware/Permissions");
+const { validateRegisterInput } = require("../validation/RegisterValidation");
 const { sendMail } = require("../mailer/Mailer");
 const { addHoursToDate } = require("../const/Funcs");
+const { isEmpty } = require("../validation/isEmpty");
+
+const { User } = require("../models/User");
 
 // @route     POST /api/auth/register
 // @desc      Register new user account
@@ -15,34 +18,30 @@ const { addHoursToDate } = require("../const/Funcs");
 router.post("/register", async (req, resp) => {
   try {    
     // validate registration input
-    const { 
-      errs, 
-      isValid 
-    } = validateRegisterInput(req.body);
-    console.log("Is valid: " + isValid);
-    if (!isValid) {
+    let errs = {};
+    validateRegisterInput(req.body, errs);
+    if (!isEmpty(errs)) {
       console.log(errs);
       return resp.status(400).json(errs);
     }
 
     // check that user with same email does not already exist
-    const existsByEmail = await User.findOne({
+    const existsByEmail = await User.exists({
       email: new RegExp("^" + req.body.email + "$", "i")
     });
-    console.log("Exists already by email: " + existsByEmail);
     if (existsByEmail) {
-      console.log("Already a user with email");
+      console.log("User with the entered email already exists");
       return resp.status(400).json({
-        error: "There is already a user with this email"
+        error: "User with the entered email already exists"
       });
     }
 
      // encrypt the password
-    const hashPassword = await bcrypt.hash(req.body.password, 12);    
+    const hashedPassword = await bcrypt.hash(req.body.password, 12);    
     // create new user
     const newUser = new User({    
       email: req.body.email,
-      password: hashPassword,
+      password: hashedPassword,
       validated: false,
       jwtToken: "NULL"
     });   
@@ -65,7 +64,7 @@ router.post("/register", async (req, resp) => {
     const mailOptions = {
       from: "corngrub42069@gmail.com",
       to: req.body.email,
-      subject: "Test",
+      subject: "Validate Your Registration",
       html: html
     };
     const [isErr, message] = sendMail(mailOptions)
@@ -119,9 +118,9 @@ router.put("/validate", async (req, resp) => {
       new: true
     });
 
-    console.log("Return user json obg");
+    console.log("Return user json obj without password");
     // return user json obj without password
-    const userToReturn = { ...updatedUser._doc }
+    const userToReturn = { ...updatedUser._doc };
     delete userToReturn.password;
     console.log(userToReturn);
     return resp.json(userToReturn);
@@ -192,36 +191,14 @@ router.post("/login", async (req, resp) => {
     console.log(decoded);
 
     // remove password from user doc and return user json
+    console.log("Return user json obj without password");
     const userToReturn = { ...updatedUser._doc };
     delete userToReturn.password;    
+    console.log(userToReturn);
     return resp.json({
       jwtToken: jwtToken,
       user: userToReturn
     });
-  } catch (err) {
-    console.log(err);
-    return resp.status(500).send(err.message);
-  }
-});
-
-// @route     POST /api/auth/request-reset-pass
-// @desc      User submits request to reset password
-// @access    Public
-router.post("/request-reset-password", async (req, resp) => {
-  try {
-      // check if user exists
-    const userExists = await User.exists({
-      email: req.body.email
-    });
-    if (!userExists) {
-      return resp.status(400).json({
-        error: "No user found with the specified email"
-      });
-    }        
-
-    // TODO: Send email to user here
-
-    return resp.message("Sent reset link to email");
   } catch (err) {
     console.log(err);
     return resp.status(500).send(err.message);
@@ -248,12 +225,16 @@ router.put("/logout", requiresAuth, async (req, resp) => {
     }, {
       new: true
     });
+
+    // get user json obj to return
+    console.log("Return user json obj without password");
     const userToReturn = { ...updatedUser._doc };
     delete userToReturn.password;    
-    console.log(userToReturn);
-    
+    console.log(userToReturn);    
+
     // clear cookie in browser
     resp.clearCookie("access-token");
+    console.log("User now logged out");
     return resp.json(userToReturn); 
   } catch (err) {
     console.log(err);

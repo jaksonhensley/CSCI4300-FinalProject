@@ -14,7 +14,7 @@ const RequestResetPass = () => {
     e.preventDefault();  
     setLoading(true);      
     console.log("Email: " + email);
-    await axios.post("/api/auth/register", { email })
+    await axios.post("/api/pwd/request-reset-pwd", { email })
     .then(() => {
       let message = "An email has been sent to " + email + " with further steps for resetting your password.";
       navigate("/success", {

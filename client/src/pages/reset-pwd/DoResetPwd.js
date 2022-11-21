@@ -1,91 +1,85 @@
-import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import ErrorModal from "../error/ErrorModal";
 
 import "./DoResetPwd.css";
 import "../../shared/style/common.css";
+import axios from "axios";
 
-const DoResetPwd = ({users, tokens}) => {
-  const [usersState, setUsersState] = useState(users);
-  const [tokensState, setTokensState] = useState(tokens);
+const DoResetPwd = () => {
   const [newPwd, setNewPwd] = useState("");
-  const [newPwdConfirm, setNewPwdConfirm] = useState("");
-  const [isError, setIsError] = useState(false);
-  const [isPwdChangeSuccess, setIsPwdChangeSuccess] = useState(false);
+  const [newPwdConfirm, setNewPwdConfirm] = useState("");  
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  const { userIdParam, codeParam } = useParams();
+  const navigate = useNavigate();
+  const { userId, token } = useParams();
 
-  let isLoggedIn = false;
+  // If no reset token exists with the given user id and token, then navigate to the error page
+  useEffect(() => {
+    console.log("Use effect: check if pwd reset token exists");
+    console.log(userId);
+    console.log(token);
+    (async () => {
+      const { success } = await axios.get("/api/pwd/reset-pwd-token-exists", {
+        userId,
+        token      
+      });
 
-  if (isPwdChangeSuccess) {
-    return (
-      <div>
-        <h1 className="text-center">Password successfully changed!</h1>       
-        {!isLoggedIn &&
-          <Link to="/login">
-            <span className="button-primary button-primary-green">Go to Login</span>
-          </Link>       
-        }
-      </div>
-    );
-  }  
+      // success should be of type boolean
+      console.log(typeof data);
+      console.log(success);    
 
-  const existsUserById = (id) => {
-    let b = usersState.some((user) => user.id === id);
-    console.log("Exists user by id: " + b);
-    return b;
-  };
+      // if no success, then there is no password reset token with matching user id or token fields,
+      // in which case navigate to error page
+      if (!success) {
+        console.log("Navigating to error page");
+        navigate("/error", {
+          state: {
+            message: "No password reset token found!"
+          }
+        });
+      }
+    })();
+  }, [userId, token, navigate]);
 
-  const existsTokenByUserIdAndCode = (id, code) => {
-    let b = tokensState.some((token) => token.userId === id && token.code === code);
-    console.log("Exists token by user id and code: " + b);
-    return b;
-  };
-
-  const tempEncryptFunc = (pwd) => {
-    return pwd;
-  };
-
-  const handleChangeUserPwd = (e, id) => {
+  // Processes request to change password. If there are errors, then set the errors state. 
+  // Otherwise, navigate to success page.
+  const handleChangeUserPwd = async (e) => {
+    e.preventDefault();
     console.log("New pwd: " + newPwd);
     console.log("New pwd confirm: " + newPwdConfirm);
-    if (newPwd !== newPwdConfirm) {
-      setIsError(true);
-    } else {
-      const updatedUsers = usersState.map((user) => {
-        if (user.id === id) {
-          const newPwdEncrypted = tempEncryptFunc(newPwd);
-          return {...user, password: newPwdEncrypted};
+
+    await axios.post("/api/pwd/do-reset-password", {
+      userId: userId,
+      newPwd: newPwd,
+      newPwdConfirm: newPwdConfirm      
+    })
+    .then(() => {
+      navigate("/success", {
+        state: {
+          message: "Successfully changed password!"
         }
-        return user;
       });
-      setUsersState(updatedUsers);
-      const updatedTokens = tokensState.filter((token) => token.userId !== id);
-      setTokensState(updatedTokens);
-      setIsPwdChangeSuccess(true);
-    }
-    setNewPwd("");
-    setNewPwdConfirm("");
-    e.preventDefault();
+    })
+    .catch((err) => {
+      setLoading(false);
+      console.log(err);
+      if (err?.response?.data) {
+        setErrors(err.response.data);
+      }
+    });
   };
 
-  const onCloseErrorModal = () => {
-    setIsError(false);
-  };
-
-  if (!existsUserById(+userIdParam) || !existsTokenByUserIdAndCode(+userIdParam, codeParam)) {
-    console.log("id param: " + userIdParam);
-    console.log("token param: " + codeParam);
+  // If there are errors, then display them in a modal the user is forced to have to close before proceeding
+  if (errors.length > 0) {
     return (
-      <div>
-        <h1>ERROR: Bad vals</h1>
-      </div>
+      <ErrorModal 
+        msg="Password does not match confirmation!" 
+        onClose={() => setErrors({})}/>
     );
-  }
-
-  if (isError) {
-    return <ErrorModal msg="Password does not match confirmation!" onClose={onCloseErrorModal}/>
   }
 
   return (
@@ -120,7 +114,8 @@ const DoResetPwd = ({users, tokens}) => {
             <button 
               type="submit" 
               className="button-primary button-primary-green" 
-              onClick={(e) => handleChangeUserPwd(e, +userIdParam)}>
+              disabled={loading}
+              onClick={(e) => handleChangeUserPwd(e)}>
               Change Password
             </button>
           </div>

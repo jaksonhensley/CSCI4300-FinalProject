@@ -47,50 +47,17 @@ const requiresAuth = async (req, resp, next) => {
         new Date() >= user.jwtExpire) {
       throw "Invalid jwt state";
     }
-
     // user passes authentication
-    console.log("User passes auth validation");
     const userToReturn = { ...user._doc };
     delete userToReturn.password;
-    console.log(userToReturn);
     req.user = userToReturn;
     return next();
-
-  } catch (err) {
-    console.log(err);
-    
+  } catch (err) {  
+    console.log(err);    
     resp.clearCookie("access-token");
     resetUser();   
     return fail(err);
   }
-
-  /*
-  let isAuthorized = false;
-  
-  if (jwtToken) {
-    console.log("Token is present");
-    try {
-      const { userId } = jwt.verify(jwtToken, process.env.JWT_SECRET);
-      const user = await User.findById(userId);      
-      if (user) {
-        console.log("Found user by id");
-        const userToReturn = { ...user._doc };
-        delete userToReturn.password;
-        req.user = userToReturn;
-        isAuthorized = true;
-      }       
-    } catch (err) {
-      console.log(err);
-    }
-  } 
-
-  console.log("Is authorized: " + isAuthorized);
-  if (isAuthorized) {
-    return next();
-  } else {
-    return resp.status(401).send("Unauthorized");
-  }
-  */
 };
 
-module.exports = requiresAuth;
+module.exports = { requiresAuth };

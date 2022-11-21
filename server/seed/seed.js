@@ -2,10 +2,10 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
-const ItemType = require("../const/ItemType");
+const { CUISINE, SIDE, DRINK, DESSERT } = require("../const/ItemType");
 const { User } = require("../models/User");
 const { Item } = require("../models/Item");
-const { CartItem}  = require("../models/CartItem");
+const { CartItem }  = require("../models/CartItem");
 const { PwdResetToken } = require("../models/PwdResetToken");
 
 let database;
@@ -31,7 +31,7 @@ const createSeedUsers = async () => {
   const hashedPassword1 = await bcrypt.hash("password123?!", 12);
   return [
     {
-      email: "johnmichaellavender123@gmail.com",
+      email: "corngrub42069@gmail.com",
       password: hashedPassword1,
       validated: true
     }
@@ -42,49 +42,49 @@ const createSeedItems = async () => {
   return [
     {
       itemName: "Shepherd's Pie",
-      itemType: ItemType.CUISINE,
+      itemType: CUISINE,
       itemPrice: 9,
       imgSrc: "/img/Shepherd's-Pie.jpg"
     },
     {
       itemName: "Cornmeal Fish",
-      itemType: ItemType.CUISINE,
+      itemType: CUISINE,
       itemPrice: 10,
       imgSrc: "/img/Cornmeal-Fried-Fish.jpg"
     },
     {
       itemName: "Cornbread",
-      itemType: ItemType.SIDE,
+      itemType: SIDE,
       itemPrice: 3,
       imgSrc: "/img/Corn-Bread.jpg"
     },
     {
       itemName: "Grilled corn",
-      itemType: ItemType.SIDE,
+      itemType: SIDE,
       itemPrice: 4,
       imgSrc: "/img/Grilled-Corn.jpg"
     },
     {
       itemName: "Corn Milk",
-      itemType: ItemType.DRINK,
+      itemType: DRINK,
       itemPrice: 3,
       imgSrc: "/img/Corn-Milk.jpg"
     },
     {
       itemName: "Corn Beer",
-      itemType: ItemType.DRINK,
+      itemType: DRINK,
       itemPrice: 5,
       imgSrc: "/img/Corn-Beer.png"
     },
     {
       itemName: "Corn Pudding",
-      itemType: ItemType.DESSERT,
+      itemType: DESSERT,
       itemPrice: 6,
       imgSrc: "/img/Corn-Pudding.jpg"
     },
     {
       itemName: "Sweet Corn Cake",
-      itemType: ItemType.DESSERT,
+      itemType: DESSERT,
       itemPrice: 6,
       imgSrc: "/img/Sweet-Corn-Cake.jpg"
     }
@@ -98,7 +98,7 @@ const seedDB = async () => {
   await PwdResetToken.deleteMany({});
   await CartItem.deleteMany({});
   await User.deleteMany({});
-  // await User.insertMany(seedUsers);
+  await User.insertMany(seedUsers);
   await Item.deleteMany({});
   await Item.insertMany(seedItems);
 };

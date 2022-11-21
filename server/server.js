@@ -9,6 +9,7 @@ const path = require("path");
 const AuthRoutes = require("./routes/AuthRoutes");
 const ItemRoutes = require("./routes/ItemRoutes");
 const CartRoutes = require("./routes/CartRoutes");
+const PwdResetRoutes = require("./routes/PwdResetRoutes");
 
 const App = express();
 
@@ -22,6 +23,7 @@ App.set(express.static(path.join(__dirname, 'public')));
 
 // set app routes
 App.use("/api/auth", AuthRoutes);
+App.use("/api/pwd", PwdResetRoutes);
 App.use("/api/items", ItemRoutes);
 App.use("/api/cart", CartRoutes);
 

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const requiresAuth = require("../middleware/Permissions");
+const { requiresAuth } = require("../middleware/Permissions");
 const { CartItem } = require("../models/CartItem");
 
 // @route    GET /api/cart/current

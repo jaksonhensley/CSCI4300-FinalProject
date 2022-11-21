@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import { useGlobalContext } from "../../shared/context/GlobalContext";
+
 import "./Auth.css";
 
 const Login = () => {
