@@ -6,7 +6,7 @@
 ### Creators:
 
 - John Lavender
-- Jakson Henley
+- Jakson Hensley
 - Jacob Kossler
 
 ---
