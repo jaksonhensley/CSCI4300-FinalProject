@@ -1,10 +1,32 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useGlobalContext } from "../../context/GlobalContext";
 
 import './NavBar.css';
 
 const NavBar = () => {
-  const navItems = [
+  const { user } = useGlobalContext();
+
+  const anonymousNavItems = [
+    {
+      label: "HOME",
+      link: "/"
+    },
+    {
+      label: "ABOUT",
+      link: "/about"
+    },
+    {
+      label: "MENU",
+      link: "/menu"
+    },    
+    {
+      label: "LOGIN / REGISTER",
+      link: "/login"
+    }
+  ];
+
+  const loggedInNavItems = [
     {
       label: "HOME",
       link: "/"
@@ -26,6 +48,9 @@ const NavBar = () => {
       link: "/account"
     }
   ];
+
+  // render different items depending on if logged in or not
+  let navItems = user ? loggedInNavItems : anonymousNavItems;
 
   const renderedNavItems = navItems.map((navItem) => {
     return (        

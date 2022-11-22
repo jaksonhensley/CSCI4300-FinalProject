@@ -74,7 +74,7 @@ const Register = () => {
             />
             {
               errors.email &&
-              <p className="error">{errors.email}</p>              
+              <p className="red-text">{errors.email}</p>              
             }
           </div>
           <div className="form-group mt-3">

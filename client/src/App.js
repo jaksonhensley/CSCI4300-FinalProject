@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -78,7 +78,7 @@ const App = () => {
         element={ 
           <PrivateRoute
             redirect={"/login"}>
-            <Account/>
+              <Account/>
           </PrivateRoute>        
         }
       />
@@ -91,7 +91,10 @@ const App = () => {
       <Route 
         path="/cart" 
         element={ 
-          <Cart/>
+          <PrivateRoute
+            redirect={"/login"}>
+              <Cart/>
+          </PrivateRoute>
         } 
       />
       <Route
