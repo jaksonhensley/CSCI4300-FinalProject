@@ -10,8 +10,8 @@ import "./Menu.css";
 
 const Menu = () => {
   const { user } = useGlobalContext();
-  const [cart, setCart] = useState({});
-  const [items, setItems] = useState({});
+  const [cart, setCart] = useState([]);
+  const [items, setItems] = useState([]);
   const [currType, setCurrType] = useState(CUISINE);
 
   // for convenience, create array of menu section types
@@ -22,22 +22,26 @@ const Menu = () => {
     DESSERT
   ];
 
-  // load cart data on component mount
+  // load cart data if user is present, else set cart state to empty array
   useEffect(() => {
+    if (!user) {
+      setCart([]);
+      return;
+    }
     (async () => {
-      const { cartData } = await axios.get("/api/cart/current");
-      setCart(cartData);
+      const { data } = await axios.get("/api/cart/current");
+      setCart(data);
     })()
     .catch((err) => {
       console.log(err);     
     });
-  }, []);
+  }, [user]);
 
   // reload items when menu section type state changes
   useEffect(() => {
     (async () => {      
-      const { itemData } = await axios.get("/api/items/" + currType);
-      setItems(itemData);      
+      const { data } = await axios.get("/api/items/" + currType);
+      setItems(data);      
     })()
     .catch((err) => {
       console.log(err);
@@ -59,31 +63,55 @@ const Menu = () => {
 
   // returns true if the cart contains the item, else false
   const cartContainsItem = (item) => {
+    console.log("Check if cart contains item");
+    console.log(typeof cart);
+    console.log(cart);    
     return cart.some((cartItem) => cartItem.itemId === item._id);
   };
 
-  // adds the item to the user's cart
-  const addItemToCart = async (item) => {
+  // handle add item to the user's cart
+  const handleAddItemToCart = async (itemId) => {    
+    console.log("Handle add item to cart");
+
+    // if no user present, then fail fast
     if (!user) {
       console.log("Can not add item to cart when not logged in");
       return;
-    }
+    }    
+
+    // add item to cart
     await axios.post("/api/cart/new", {
-      itemId: item._id,    
+      itemId: itemId,    
+    })
+    .then(() => {
+      console.log("Item added to cart");
     })
     .catch((err) => {
       console.log(err);
+    });
+
+    // update the user's cart
+    if (!user) {
+      setCart([]);
+      return;
+    }
+    (async () => {
+      const { data } = await axios.get("/api/cart/current");
+      setCart(data);
+    })()
+    .catch((err) => {
+      console.log(err);     
     });
   };
 
   // the rendered menu items
   const renderedMenuItems = items.map((item) => {
     return (      
-      <tr key={item.id}>
+      <tr key={item._id}>
         <td className="cell">
           <span className="item-title">{item.itemName + " - $" + item.itemPrice}</span>
           <img className="item-img" src={item.imgSrc} alt=""/>
-          <div className="item-action">
+          <div>
             {
               !user && 
                 <span className="not-logged-in">Must be logged in to add cart item</span>
@@ -94,11 +122,13 @@ const Menu = () => {
             }
             {
               user && !cartContainsItem(item) && 
-                <button 
-                  onClick={() => addItemToCart(item)}
-                  className="add-to-cart">
-                    <span>Add to Cart</span>
-                </button>
+                <div className="item-action">
+                  <button 
+                    onClick={() => handleAddItemToCart(item._id)}
+                    className="add-to-cart">
+                      <span>Add to Cart</span>
+                  </button>
+                </div>
             }    
           </div>  
         </td>

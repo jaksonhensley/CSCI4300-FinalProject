@@ -79,9 +79,11 @@
 
 .add-to-cart {
   background-color: white;
-  color: black;
   padding: 5px 20px 5px 20px;
   border-radius: 50px;
+  font-weight: bold;
+  background-color: green;
+  color: white;
 }
 
 .add-to-cart:hover {
@@ -89,7 +91,6 @@
   transition: 0.3s;
   font-weight: bold;
   background-color: #ff9900;
-  color: white;
   padding: 5px 20px 5px 20px;
   border-radius: 50px;
 }
@@ -107,13 +108,8 @@
   padding: 5px 20px 5px 20px;
   border-radius: 50px;
   font-size: 18px;
-  font-weight: bold;
-}
-
-.already-in-cart:hover {
-  transform: scale(1.1);
-  transition: 0.3s;
-  background-color: #ffbdbd;
+  font-style: italic;
+  background-color: red;
 }
 
 @media screen and (max-width: 800px) {

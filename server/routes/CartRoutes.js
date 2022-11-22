@@ -8,12 +8,15 @@ const { CartItem } = require("../models/CartItem");
 // @access   Private
 router.get("/current", requiresAuth, async (req, resp) => {
   try {
+    console.log("Get current cart items");
     await CartItem.deleteMany({
       count: { $lt: 1 }
     });
     const cartItems = await CartItem.find({
       userId: req.user._id
     });
+    console.log(typeof cartItems);
+    console.log(cartItems);
     return resp.json(cartItems);
   } catch (err) {
     console.log(err);
@@ -26,11 +29,13 @@ router.get("/current", requiresAuth, async (req, resp) => {
 // @access   Private
 router.post("/new", requiresAuth, async (req, resp) => {
   try {    
+    console.log("Add new item to cart");
     const alreadyInCart = await CartItem.exists({
       userId: req.user._id,
       itemId: req.body.itemId
     });
     if (alreadyInCart) {
+      console.log("Item already in cart");
       return resp.status(400).json({
         error: "Item already in cart"
       });
@@ -39,6 +44,7 @@ router.post("/new", requiresAuth, async (req, resp) => {
     if (!count) {
       count = 1;
     }
+    console.log("Count: " + count);
     const newCartItem = new CartItem({
       userId: req.user._id,
       itemId: req.body.itemId,
