@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { requiresAuth } = require("../middleware/Permissions");
+const { Item } = require("../models/Item");
 const { CartItem } = require("../models/CartItem");
 
 // @route    GET /api/cart/current
@@ -8,6 +9,7 @@ const { CartItem } = require("../models/CartItem");
 // @access   Private
 router.get("/current", requiresAuth, async (req, resp) => {
   try {
+    // get current cart items
     console.log("Get current cart items");
     await CartItem.deleteMany({
       count: { $lt: 1 }
@@ -15,8 +17,8 @@ router.get("/current", requiresAuth, async (req, resp) => {
     const cartItems = await CartItem.find({
       userId: req.user._id
     });
-    console.log(typeof cartItems);
     console.log(cartItems);
+
     return resp.json(cartItems);
   } catch (err) {
     console.log(err);
@@ -65,7 +67,8 @@ router.put("/:id", requiresAuth, async (req, resp) => {
   try {
     // delta val is required
     if (!req.body.delta) {
-      return resp.status(404).json({
+      console.log("No delta specified in request body");
+      return resp.status(400).json({
         error: "No delta specified in request body"
       });
     }    
@@ -73,28 +76,31 @@ router.put("/:id", requiresAuth, async (req, resp) => {
     // find cart item
     const cartItem = await CartItem.findOne({
       userId: req.user._id,
-      _id: req.body.id
+      _id: req.params.id
     });    
     if (!cartItem) {
-      return resp.status(404).json({
+      console.log("Could not find cart item");
+      return resp.status(400).json({
         error: "Could not find cart item"
       });
     }
 
     // make sure to convert delta to int! (put + sign at head of var)
     const newCount = cartItem.count + +req.body.delta;
+    console.log("New count: " + newCount);
 
     // update cart item with new count val
     const updatedCartItem = await CartItem.findOneAndUpdate({
       userId: req.user._id,
-      _id: req.body.id
+      _id: req.params.id
     }, {
       count: newCount
     }, {
       new: true
     });
+    console.log(updatedCartItem);
     return resp.json(updatedCartItem);
-  } catch (err) {
+  } catch (err) {    
     console.log(err);
     return resp.status(500).send(err.message);
   }  
