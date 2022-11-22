@@ -12,7 +12,7 @@ router.get("/current", requiresAuth, async (req, resp) => {
       count: { $lt: 1 }
     });
     const cartItems = await CartItem.find({
-      user: req.user._id
+      userId: req.user._id
     });
     return resp.json(cartItems);
   } catch (err) {
@@ -25,25 +25,24 @@ router.get("/current", requiresAuth, async (req, resp) => {
 // @desc     Post cart item to logged-in user's cart if not already present
 // @access   Private
 router.post("/new", requiresAuth, async (req, resp) => {
-  try {
-    if (!req.body.count) {
-      return resp.status(404).json({
-        error: "Count not specified in request body"
-      });
-    }
-    const alreadyCartItem = await CartItem.findOne({
-      user: req.user._id,
-      item: req.body.itemId
+  try {    
+    const alreadyInCart = await CartItem.exists({
+      userId: req.user._id,
+      itemId: req.body.itemId
     });
-    if (alreadyCartItem) {
+    if (alreadyInCart) {
       return resp.status(400).json({
         error: "Item already in cart"
       });
     }
+    let count = req.body.count;
+    if (!count) {
+      count = 1;
+    }
     const newCartItem = new CartItem({
-      user: req.user._id,
-      item: req.body.itemId,
-      count: +req.body.count
+      userId: req.user._id,
+      itemId: req.body.itemId,
+      count: count
     });
     await newCartItem.save();
     return resp.json(newCartItem);
@@ -64,8 +63,8 @@ router.put("/:id", requiresAuth, async (req, resp) => {
       });
     }    
     const cartItem = await CartItem.findOne({
-      user: req.user._id,
-      _id: req.params.id
+      userId: req.user._id,
+      _id: req.body.itemId
     });    
     if (!cartItem) {
       return resp.status(404).json({
@@ -74,8 +73,8 @@ router.put("/:id", requiresAuth, async (req, resp) => {
     }
     const newCount = cartItem.count + req.body.delta;
     const updatedCartItem = await CartItem.findOneAndUpdate({
-      user: req.user._id,
-      _id: req.params.id
+      userId: req.user._id,
+      _id: req.body.itemId
     }, {
       count: newCount
     }, {
@@ -93,18 +92,18 @@ router.put("/:id", requiresAuth, async (req, resp) => {
 // @access   Private
 router.delete("/:id", requiresAuth, async (req, resp) => {
   try {
-    const alreadyCartItem = CartItem.findOne({
-      user: req.user._id,
-      _id: req.params.id      
+    const cartItemExists = CartItem.exists({
+      userId: req.user._id,
+      _id: req.body.id      
     });
-    if (!alreadyCartItem) {
+    if (!cartItemExists) {
       return resp.status(404).json({
         error: "Could not find cart item"
       });
     }
     await CartItem.findOneAndDelete({
       user: req.user._id,
-      _id: req.params.id
+      _id: req.body.itemId
     });
     return resp.json({
       success: true

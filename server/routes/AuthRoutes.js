@@ -100,8 +100,8 @@ router.put("/validate", async (req, resp) => {
       });
     }  
 
-    console.log("Check if user exists");
     // check if user exists
+    console.log("Check if user exists");    
     const user = await User.findById(req.body.userId);
     if (!user) {
       console.log("No user found with the specified id");
@@ -110,16 +110,37 @@ router.put("/validate", async (req, resp) => {
       });
     }    
 
-    console.log("Update user validated field");
     // update user validated field
+    console.log("Update user validated field");    
     const updatedUser = await User.findByIdAndUpdate(req.body.userId, {
       validated: true
     }, {
       new: true
     });
 
-    console.log("Return user json obj without password");
+    // send email confirming validation
+    const html = `
+      <div>
+        <h1>YOU'RE NOW REGISTERED!</h1>
+        <p>You're now set to start enjoying some Corn Grub! ;)</p>
+      </div>
+    `;
+    const mailOptions = {
+      from: "corngrub42069@gmail.com",
+      to: user.email,
+      subject: "You're Now Registered!",
+      html: html
+    };
+    const [isErr, message] = sendMail(mailOptions)
+    if (isErr) {
+      return resp.json(400).json({
+        error: message
+      });      
+    }
+    console.log(message);   
+
     // return user json obj without password
+    console.log("Return user json obj without password");
     const userToReturn = { ...updatedUser._doc };
     delete userToReturn.password;
     console.log(userToReturn);
@@ -135,6 +156,7 @@ router.put("/validate", async (req, resp) => {
 router.post("/login", async (req, resp) => {
   try {
     console.log("Posting login");
+    
     // check if user exists and is validated
     const user = await User.findOne({
       email: new RegExp("^" + req.body.email + "$", "i")
@@ -218,6 +240,7 @@ router.get("/current", requiresAuth, (req, resp) => {
 router.put("/logout", requiresAuth, async (req, resp) => {
   try {
     console.log("Logout route");
+    
     // remove token from user in db
     const updatedUser = await User.findByIdAndUpdate(req.user._id, {
       jwtToken: "NULL",

@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+
+import "./Auth.css";
+import "../../shared/style/common.css";
 
 const ValidateReg = () => {
   const VER_STATE_1 = "verifying";
   const VER_STATE_2 = "verified";
   const VER_STATE_3 = "failed";
 
+  const navigate = useNavigate();
   const [verifying, setVerifying] = useState(VER_STATE_1);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -32,24 +36,37 @@ const ValidateReg = () => {
 
   if (verifying === VER_STATE_1) {
     return (
-      <div>
-        <button disabled={loading} onClick={handleVerify}>
-          Click me to verify your account
+      <div className="login-container">
+        <button 
+          className="account-btn" 
+          disabled={loading} 
+          onClick={handleVerify}>
+            Click me to verify your account
         </button>
       </div>
     );
   } else if (verifying === VER_STATE_2) {
     return (
-      <div>
-        <h1>Hooray!</h1>
-        <p>Your account is now verified.</p>
-        <Link to="/login">Go to login</Link>
+      <div className="login-container">
+        <div className="login-form">
+          <div className="login-form-content">
+            <h1 className="big-white-heading">Hooray!</h1>
+            <div className="text-center">
+              <p >Your account is now verified.</p>
+              <span 
+                className="link-primary" 
+                onClick={() => navigate("/login")}>
+                  Go to login
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     );
   } else if (verifying === VER_STATE_3) {
     return (
-      <div>
-        <h1>ERROR: Failed to verify account!</h1>
+      <div className="login-container">
+        <h1 className="error">ERROR: Failed to verify account!</h1>
         <p>{errors}</p>
       </div>
     );

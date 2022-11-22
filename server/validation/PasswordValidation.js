@@ -10,7 +10,7 @@ const validatePasswordInput = (data, errs) => {
   }
   // check confirm password field
   if (isEmpty(data.confirmPassword)) {
-    errs.confirmPassword = "Confirm Password field can not be empty";
+    errs.confirmPassword = "Confirm password field can not be empty";
   } else if (!Validator.equals(data.password, data.confirmPassword)) {
     errs.confirmPassword = "Password and confirm password fields must match";
   }

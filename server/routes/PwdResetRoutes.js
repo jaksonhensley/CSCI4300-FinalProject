@@ -100,6 +100,7 @@ router.get("/reset-pwd-token-exists", async (req, resp) => {
 router.post("/reset-pwd", async (req, resp) => {
   try {
     console.log("Resetting password");
+
     // get pwd reset token
     const pwdResetTokenExists = await PwdResetToken.exists({
       token: req.body.token,
@@ -108,7 +109,7 @@ router.post("/reset-pwd", async (req, resp) => {
     // if no pwd reset token found then return with error
     if (!pwdResetTokenExists) {
       return resp.json({
-        error: "No pwd reset token found"
+        error: "No password reset token found"
       });
     }
 
@@ -147,8 +148,8 @@ router.post("/reset-pwd", async (req, resp) => {
       <div>
         <h1>YOUR PASSWORD WAS SUCCESSFULLY CHANGED!</h1>
         <p>Your password has been changed successfully!</p>
-        <p>Important: All previous password reset links are now invalidated.</p>
-        <p>If you wish to reset your password again, then you will need to make a new request and receive a new link.</p>
+        <p>All previous password reset links are now invalidated.</p>
+        <p>If you wish to reset your password again, you will need to make a new request and receive a new link.</p>
       </div>
     `;
     const mailOptions = {

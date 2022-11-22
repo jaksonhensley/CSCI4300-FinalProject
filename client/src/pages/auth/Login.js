@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../../shared/context/GlobalContext";
 
 import "./Auth.css";
+import "../../shared/style/common.css";
 
 const Login = () => {
   const { getCurrentUser, user } = useGlobalContext();
@@ -16,7 +17,6 @@ const Login = () => {
 
   useEffect(() => {
     console.log("Login component");
-    console.log("User: " + user);
     if (user !== null && navigate) {
       console.log("User logged in, redirect to account");
       navigate("/account");
@@ -59,13 +59,13 @@ const Login = () => {
                 Email address
               </span>
             </label>
-              <input 
-                type="text" 
-                value={email} 
-                className="form-control mt-1"
-                placeholder="Enter your email address..."
-                onChange={(e) => setEmail(e.target.value)}
-              />
+            <input 
+              type="text" 
+              value={email} 
+              className="form-control mt-1"
+              placeholder="Enter your email address..."
+              onChange={(e) => setEmail(e.target.value)}
+            />            
           </div>
           <div className="text-center form-group mt-3">
             <label>
@@ -79,29 +79,20 @@ const Login = () => {
               className="form-control mt-1"
               placeholder="Enter your password..."
               onChange={(e) => setPassword(e.target.value)}
-            />
+            />            
           </div>      
           <div className="text-center mt-3">
             <button type="submit" className="account-btn" disabled={loading} onClick={handleSubmit}>
               Login
             </button>
-          </div>      
-          <div>
             <p className="text-center mt-2">
               Forgot <span className="link-primary" onClick={() => navigate("/request-reset-pwd")}>password?</span>
             </p>                      
-          </div>  
-          <div>
             {
               errors.error &&
-              <div>
-                <hr/>
-                <p className="error">
-                  {errors.error}
-                </p>
-              </div>
+              <p className="red-text">{errors.error}</p>
             }
-          </div>     
+          </div>  
         </div>
       </form>
     </div>   

@@ -94,11 +94,20 @@
   border-radius: 50px;
 }
 
+.not-logged-in {
+  color: gray;
+  background-color: white;  
+  font-size: 16px;
+  font-weight: bold;
+}
+
 .already-in-cart {
   color: black;
   background-color: white;
   padding: 5px 20px 5px 20px;
   border-radius: 50px;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .already-in-cart:hover {

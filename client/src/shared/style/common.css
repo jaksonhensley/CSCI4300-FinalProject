@@ -1,3 +1,10 @@
+.big-white-heading {
+  color: white;
+  font-size: xx-large;
+  font-weight: bold;  
+  text-align: center;
+}
+
 .link-primary {
   color: blue;
   text-decoration: none;
@@ -44,4 +51,8 @@
 .text-center {
   text-align: center;
   color: white;
+}
+
+.red-text {
+  color: red;
 }

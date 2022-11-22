@@ -1,11 +1,11 @@
 const { Schema, model } = require("mongoose");
 
 const CartItemSchema = new Schema({
-  user: {
+  userId: {
     type: Schema.Types.ObjectId,
     ref: "User"
   }, 
-  item: {
+  itemId: {
     type: Schema.Types.ObjectId,
     ref: "Item"
   },

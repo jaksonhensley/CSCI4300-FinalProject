@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-import ErrorModal from "../error/ErrorModal";
-
 import "./ResetPwd.css";
 import "../../shared/style/common.css";
 import axios from "axios";
@@ -69,15 +67,6 @@ const ResetPwd = () => {
     });
   };
 
-  // If there are errors, then display them in a modal the user is forced to have to close before proceeding
-  if (errors.length > 0) {
-    return (
-      <ErrorModal 
-        msg="Password does not match confirmation!" 
-        onClose={() => setErrors({})}/>
-    );
-  }
-
   return (
     <div className="container">
       <form className="form">
@@ -86,25 +75,34 @@ const ResetPwd = () => {
           <div className="text-center form-group mt-3">
             <label>
               New Password
-              <input
-                type="password"
-                value={newPwd}
-                className="form-control mt-1"
-                placeholder="Enter your new password..."
-                onChange={(e) => setNewPwd(e.target.value)}
-              />
             </label>
+            <input
+              type="password"
+              value={newPwd}
+              className="form-control mt-1"
+              placeholder="Enter your new password..."
+              onChange={(e) => setNewPwd(e.target.value)}
+            />    
+            {
+              errors.password &&         
+              <p className="red-text">{errors.password}</p>         
+            }         
           </div>
           <div className="text-center form-group mt-3">
             <label>
-              <input
-                type="password"
-                value={newPwdConfirm}
-                className="form-control mt-1"
-                placeholder="Confirm your new password..."
-                onChange={(e) => setNewPwdConfirm(e.target.value)}
-              />
+              Confirm New Password
             </label>
+            <input
+              type="password"
+              value={newPwdConfirm}
+              className="form-control mt-1"
+              placeholder="Confirm your new password..."
+              onChange={(e) => setNewPwdConfirm(e.target.value)}
+            />
+            {
+              errors.confirmPassword &&         
+              <p className="red-text">{errors.confirmPassword}</p>         
+            } 
           </div>
           <div className="text-center mt-3">
             <button 
@@ -113,18 +111,7 @@ const ResetPwd = () => {
               disabled={loading}
               onClick={(e) => handleChangePwd(e)}>
               Change Password
-            </button>
-          </div>
-          <div>
-            {
-              errors.error &&
-              <div>
-                <hr/>
-                <p className="error">
-                  {errors.error}
-                </p>
-              </div>
-            } 
+            </button>            
           </div>
         </div>
       </form>

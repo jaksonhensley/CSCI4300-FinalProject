@@ -93,7 +93,7 @@ const Register = () => {
           </div>
           {
             errors.password &&
-            <p className="error">{errors.password}</p>
+            <p className="red-text">{errors.password}</p>
           }
           <div className="form-group mt-3">
             <label>
@@ -110,7 +110,7 @@ const Register = () => {
             />
             {
               errors.confirmPassword && 
-              <p className="error">{errors.confirmPassword}</p>
+              <p className="red-text">{errors.confirmPassword}</p>
             }
           </div>                                                
           <div className="d-grid gap-2 mt-3">
@@ -126,7 +126,7 @@ const Register = () => {
           <div>
             {
               errors.error &&
-              <p className="error">
+              <p className="red-text">
                 {errors.error}
               </p>
             }  

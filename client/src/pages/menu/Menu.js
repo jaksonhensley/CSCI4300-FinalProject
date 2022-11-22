@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
+import axios from "axios";
 
-
+import { useGlobalContext } from "../../shared/context/GlobalContext";
 import { CUISINE, SIDE, DRINK, DESSERT } from "./MenuSectionType";
+
 import "../../shared/style/common.css";
 import "./Menu.css";
 
-const Menu = ({items, cart, menuSectionType}) => {
-  const [cartState, setCartState] = useState(cart);
-  const [menuSectionTypeState, setMenuSectionTypeState] = useState(menuSectionType);
+const Menu = () => {
+  const { user } = useGlobalContext();
+  const [cart, setCart] = useState({});
+  const [items, setItems] = useState({});
+  const [currType, setCurrType] = useState(CUISINE);
 
+  // for convenience, create array of menu section types
   const menuSectionTypes = [
     CUISINE,
     SIDE,
@@ -17,50 +22,83 @@ const Menu = ({items, cart, menuSectionType}) => {
     DESSERT
   ];
 
-  const getItemsOfType = (type) => {
-    return items.filter((item) => item.itemType === type);
-  };
+  // load cart data on component mount
+  useEffect(() => {
+    (async () => {
+      const { cartData } = await axios.get("/api/cart/current");
+      setCart(cartData);
+    })()
+    .catch((err) => {
+      console.log(err);     
+    });
+  }, []);
 
-  const cartContainsItem = (item) => {
-    return cartState.some((cartItem) => cartItem.itemId === item.id);
-  };
+  // reload items when menu section type state changes
+  useEffect(() => {
+    (async () => {      
+      const { itemData } = await axios.get("/api/items/" + currType);
+      setItems(itemData);      
+    })()
+    .catch((err) => {
+      console.log(err);
+    });
+  }, [currType]);
 
-  const addToCart = (item) => {
-    const newCartItem = {
-      itemId: item.id,
-      counter: 1
-    };
-    setCartState(currentCartState => [...currentCartState, newCartItem]);
-  };
-
-  const renderedMenuSectionTypeSelector = menuSectionTypes.map((menuSectionType) => {
-    const isSelected = menuSectionType === menuSectionTypeState;
+  // the type nav in which the user can select a menu section type to display
+  const renderedTypeNav = menuSectionTypes.map((type) => {
+    const isSelected = type === currType;
     return (
       <li 
-        key={menuSectionType} 
-        onClick={isSelected ? undefined : () => setMenuSectionTypeState(menuSectionType)}
+        key={type} 
+        onClick={isSelected ? undefined : () => setCurrType(type)}
         className={isSelected ? "menu-section-type-selected" : "menu-section-type"}>
-        {menuSectionType + "s"}
+          {type + "s"}
       </li>
     );
   });
 
-  const renderedMenuItems = getItemsOfType(menuSectionTypeState).map((item) => {
+  // returns true if the cart contains the item, else false
+  const cartContainsItem = (item) => {
+    return cart.some((cartItem) => cartItem.itemId === item._id);
+  };
+
+  // adds the item to the user's cart
+  const addItemToCart = async (item) => {
+    if (!user) {
+      console.log("Can not add item to cart when not logged in");
+      return;
+    }
+    await axios.post("/api/cart/new", {
+      itemId: item._id,    
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  };
+
+  // the rendered menu items
+  const renderedMenuItems = items.map((item) => {
     return (      
       <tr key={item.id}>
         <td className="cell">
           <span className="item-title">{item.itemName + " - $" + item.itemPrice}</span>
           <img className="item-img" src={item.imgSrc} alt=""/>
           <div className="item-action">
-            {cartContainsItem(item) &&
-              <span className="already-in-cart">Already in Cart</span>
+            {
+              !user && 
+                <span className="not-logged-in">Must be logged in to add cart item</span>
             }
-            {!cartContainsItem(item) && 
-              <button 
-                onClick={() => addToCart(item)}
-                className="add-to-cart">
-                <span>Add to Cart</span>
-              </button>
+            {
+              user && cartContainsItem(item) &&
+                <span className="already-in-cart">Already in Cart</span>
+            }
+            {
+              user && !cartContainsItem(item) && 
+                <button 
+                  onClick={() => addItemToCart(item)}
+                  className="add-to-cart">
+                    <span>Add to Cart</span>
+                </button>
             }    
           </div>  
         </td>
@@ -71,7 +109,7 @@ const Menu = ({items, cart, menuSectionType}) => {
   return (
     <div className="menu-container">
       <ul className="menu-section-types">
-        {renderedMenuSectionTypeSelector}
+        {renderedTypeNav}
       </ul>
       <div className="menu-table-container">
         <Table>              
@@ -82,10 +120,6 @@ const Menu = ({items, cart, menuSectionType}) => {
       </div>
     </div>
   );
-};
-
-Menu.defaultProps = {
-  menuSectionType: CUISINE
 };
 
 export default Menu;

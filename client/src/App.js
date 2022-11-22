@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -20,92 +20,12 @@ import Loading from "./shared/components/loading/Loading";
 import Success from "./shared/components/success/Success";
 import Error from "./shared/components/error/Error";
 
-import { CUISINE, SIDE, DRINK, DESSERT } from "./pages/menu/MenuSectionType";
 import { GlobalProvider } from "./shared/context/GlobalContext";
 import { useGlobalContext } from "./shared/context/GlobalContext";
 import PrivateRoute from "./shared/components/PrivateRoute";
 import ValidateReg from "./pages/auth/ValidateReg";
 
 const App = () => {  
-
-  const tempItems = [
-    {
-      id: 1,
-      itemName: "Shepherd's Pie",
-      itemType: CUISINE,
-      itemPrice: 9,
-      imgSrc: "/img/Shepherd's-Pie.jpg"
-    },
-    {
-      id: 2,
-      itemName: "Cornmeal Fish",
-      itemType: CUISINE,
-      itemPrice: 10,
-      imgSrc: "/img/Cornmeal-Fried-Fish.jpg"
-    },
-    {
-      id: 3,
-      itemName: "Cornbread",
-      itemType: SIDE,
-      itemPrice: 3,
-      imgSrc: "/img/Corn-Bread.jpg"
-    },
-    {
-      id: 4,
-      itemName: "Grilled corn",
-      itemType: SIDE,
-      itemPrice: 4,
-      imgSrc: "/img/Grilled-Corn.jpg"
-    },
-    {
-      id: 5,
-      itemName: "Corn Milk",
-      itemType: DRINK,
-      itemPrice: 3,
-      imgSrc: "/img/Corn-Milk.jpg"
-    },
-    {
-      id: 6,
-      itemName: "Corn Beer",
-      itemType: DRINK,
-      itemPrice: 5,
-      imgSrc: "/img/Corn-Beer.png"
-    },
-    {
-      id: 7,
-      itemName: "Corn Pudding",
-      itemType: DESSERT,
-      itemPrice: 6,
-      imgSrc: "/img/Corn-Pudding.jpg"
-    },
-    {
-      id: 8,
-      itemName: "Sweet Corn Cake",
-      itemType: DESSERT,
-      itemPrice: 6,
-      imgSrc: "/img/Sweet-Corn-Cake.jpg"
-    }
-  ];
-
-  const tempCart = [
-    { 
-      itemId: 1,
-      counter: 0
-    },
-    { 
-      itemId: 2,
-      counter: -1
-    },
-    {
-      itemId: 3,
-      counter: 3
-    },
-    {     
-      itemId: 4,
-      counter: 2
-    },   
-  ];
-
   const routes = (
     <Routes>
       <Route 
@@ -165,17 +85,13 @@ const App = () => {
       <Route 
         path="/menu" 
         element={
-          <Menu 
-            items={tempItems} 
-            cart={tempCart}/> 
+          <Menu/> 
         }
       />
       <Route 
         path="/cart" 
         element={ 
-          <Cart 
-            items={tempItems} 
-            cart={tempCart}/>
+          <Cart/>
         } 
       />
       <Route
