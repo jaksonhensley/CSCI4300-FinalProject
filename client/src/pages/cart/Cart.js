@@ -14,7 +14,19 @@ const Cart = () => {
   const [totalCost, setTotalCost] = useState(0);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [orderConfirmed, setOrderConfirmed] = useState(false);
   const navigate = useNavigate();
+
+  // navigate to success page if order is confirmed
+  useEffect(() => {
+    if (orderConfirmed) {
+      navigate("/success", {
+        state: {
+          message: "You just paid $" + totalCost + " for corn products! Congrats! You should soon receive an email confirming your order."
+        }
+      });
+    }
+  }, [orderConfirmed, totalCost, navigate]);
 
   // if there are errors, then navigate to err page
   useEffect(() => {
@@ -110,6 +122,54 @@ const Cart = () => {
     setLoading(false);
   };  
 
+  // delete the cart item
+  const deleteCartItem = async (cartItemId) => {
+    console.log("Click delete cart item");
+    setLoading(true);
+    try {
+      await axios.delete(`/api/cart/delete/${cartItemId}`);
+    } catch (err) {
+      console.log(err);
+      if (err?.response?.data) {
+        setErrors(err.response.data);
+      }
+    }
+    resetState();
+    setLoading(false);
+  };
+
+  // delete all cart items
+  const deleteAllCartItems = async () => {
+    console.log("Click delete all cart items");
+    setLoading(true);
+    try {
+      await axios.delete("/api/cart/deleteAll");
+    } catch (err) {
+      console.log(err);
+      if (err?.response?.data) {
+        setErrors(err.response.data);
+      }
+    }
+    resetState();
+    setLoading(false);
+  };
+
+  // confirm order
+  const confirmOrder = async () => {
+    setLoading(true);
+    try {
+      await axios.post("/api/cart/order");
+    } catch (err) {
+      console.log(err);
+      if (err?.response?.data) {
+        setErrors(err.response.data);
+      }
+    }
+    resetState();
+    setLoading(false);
+    setOrderConfirmed(true);
+  };
+
   const renderedCartItems = cart.map((cartItem) => {
     // find the item that this cart item is associated with
     const item = items.find((item) => item._id === cartItem.itemId);
@@ -120,44 +180,44 @@ const Cart = () => {
     return (
       <tr key={item._id}>
         <td className="cell">
-          <h1 className="item-title">{item.itemName}</h1>
+          <span className="item-title">{item.itemName}</span>
           <img className="item-img" src={item.imgSrc} alt=""/>
-          <h3 className="item-type">{item.itemType}</h3>
-            <Table striped bordered hover size="sm">
-              <tbody>
-                <tr>
-                  <td>
-                    <button 
-                      disabled={loading || cartItem.count === 1}
-                      onClick={() => changeCartItemCount(cartItem._id, -1)} 
-                      className={cartItem.count === 1 ? "item-btn item-btn-grey" : "item-btn item-btn-red"}>
-                        -
-                    </button>
-                  </td>                 
-                  <td>
-                    <h1 className="text-center">
-                      {cartItem.count}
-                    </h1>
-                  </td>
-                  <td>
-                    <button
-                      disabled={loading  || cartItem.count === 9}
-                      onClick={() => changeCartItemCount(cartItem._id, 1)} 
-                      className={cartItem.count === 9 ? "item-btn item-btn-grey" : "item-btn item-btn-green"}>
-                        +
-                    </button>                               
-                  </td>
-                </tr>
-              </tbody>
-            </Table>           
+          <span className="item-type">{item.itemType}</span>
+          <Table striped bordered hover size="sm">
+            <tbody>
+              <tr>
+                <td>
+                  <button 
+                    disabled={loading || cartItem.count === 1}
+                    onClick={() => changeCartItemCount(cartItem._id, -1)} 
+                    className={cartItem.count === 1 ? "item-btn item-btn-grey" : "item-btn item-btn-red"}>
+                      -
+                  </button>
+                </td>                 
+                <td>
+                  <h1 className="text-center">
+                    {cartItem.count}
+                  </h1>
+                </td>
+                <td>
+                  <button
+                    disabled={loading  || cartItem.count === 9}
+                    onClick={() => changeCartItemCount(cartItem._id, 1)} 
+                    className={cartItem.count === 9 ? "item-btn item-btn-grey" : "item-btn item-btn-green"}>
+                      +
+                  </button>                               
+                </td>
+              </tr>
+            </tbody>
+          </Table>           
           <span className="item-title">${totalCost}</span>
           <div className="remove-btn-container">
-            <span 
+            <button 
               disabled={loading}
-              onClick={() => {}}
+              onClick={() => deleteCartItem(cartItem._id)}
               className="button-primary button-primary-red">
-                Remove Item
-            </span>
+                <span className="remove-item">Remove Item</span>
+            </button>
           </div>
         </td>
       </tr>
@@ -166,30 +226,51 @@ const Cart = () => {
 
   return (
     <div className="cart-page-body">
-    <div className="cart-container">    
-      <div className="cart-table-container">
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th className="text-center cart-heading">Shopping Cart</th>         
-            </tr>
-          </thead>
-          <tbody>
-            {renderedCartItems}
-          </tbody>
-        </Table>   
-      </div>
-      <div>
-        <h1 className="text-center cart-heading">TOTAL COST: {" $"} {totalCost}</h1>
-      </div>
-      <div className="confirm-order-container">              
-        <button className="button-primary button-primary-green">
-          <span className="confirm-order">
-            CONFIRM ORDER
-          </span>
-        </button>
-      </div>
-    </div>    
+      <div className="cart-container">    
+        <div className="remove-all-container">
+          {
+          cart.length > 0 &&
+            <button 
+              disabled={loading}
+              className="button-primary button-primary-red remove-all-button"
+              onClick={() => deleteAllCartItems()}>                  
+                <span className="remove-all">
+                  REMOVE ALL
+                </span>
+            </button>
+          }
+        </div>
+        <div className="cart-table-container">       
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th className="text-center cart-heading">Shopping Cart</th>                                  
+              </tr>
+            </thead>
+            <tbody>
+              {renderedCartItems}
+            </tbody>
+          </Table>   
+        </div>
+        <div className="confirm-order-container">      
+          <h1 className="text-center cart-heading total-cost">TOTAL COST: {" $"}{totalCost}</h1>
+          {
+          cart.length > 0 &&         
+            <button
+              disabled={loading || cart.length <= 0}
+              className="button-primary button-primary-green"
+              onClick={() => confirmOrder()}>
+                CONFIRM ORDER
+            </button>         
+          }
+          {
+          cart.length <= 0 &&
+            <h1>
+              CART IS EMPTY
+            </h1>        
+          }
+        </div>
+      </div>    
     </div>
   );
 };

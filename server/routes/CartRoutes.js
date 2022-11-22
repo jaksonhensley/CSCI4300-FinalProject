@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { requiresAuth } = require("../middleware/Permissions");
-const { Item } = require("../models/Item");
 const { CartItem } = require("../models/CartItem");
+const { sendMail } = require("../mailer/Mailer");
 
 // @route    GET /api/cart/current
 // @desc     Get all items in the logged-in user's cart
@@ -106,28 +106,94 @@ router.put("/:id", requiresAuth, async (req, resp) => {
   }  
 });
 
-// @route    DELETE /api/cart/:id
+// @route    DELETE /api/cart/delete/:id
 // @desc     Delete a cart item, or all cart items if no id is given
 // @access   Private
-router.delete("/:id", requiresAuth, async (req, resp) => {
+router.delete("/delete/:id", requiresAuth, async (req, resp) => {
   try {
+    console.log("Delete cart item with id " + req.params.id);
     const cartItemExists = CartItem.exists({
       userId: req.user._id,
-      _id: req.body.id      
+      _id: req.params.id      
     });
     if (!cartItemExists) {
+      console.log("Cart item with id " + req.params.id + " doesn't exist");
       return resp.status(404).json({
         error: "Could not find cart item"
       });
     }
     await CartItem.findOneAndDelete({
-      user: req.user._id,
-      _id: req.body.id
+      userId: req.user._id,
+      _id: req.params.id
     });
+    console.log("Cart item deleted");
     return resp.json({
       success: true
     });
   } catch (err) {
+    console.log(err);
+    return resp.status(500).send(err.message);
+  }
+});
+
+// @route     DELETE /api/cart/deleteAll
+// @desc      Deletes all cart items associated with the user
+// @access    Private
+router.delete("/deleteAll", requiresAuth, async (req, resp) => {
+  try {
+    console.log("Delete all cart items belonging to user with id " + req.user._id);
+    await CartItem.deleteMany({
+      userId: req.user._id
+    });
+    console.log("All cart items belonging to user are deleted");
+    return resp.json({
+      success: true
+    });
+  } catch (err) {
+    console.log("Error deleting all cart items of user");
+    console.log(err);
+    return resp.status(500).send(err.message);
+  }
+});
+
+// @route     POST /api/cart/order
+// @desc      Transfers all cart items to delivery
+// @access    Private
+router.post("/order", requiresAuth, async (req, resp) => {
+  try {
+    // delete all cart items belonging to user
+    console.log("Processing order");
+    await CartItem.deleteMany({
+      userId: req.user._id
+    });
+
+    console.log("Trying to email user about order...");
+    // send order confirmation email
+    const html = `
+      <div>
+        <h1>YOUR ORDER'S ON ITS WAY!</h1>
+        <p>Thank you for using Corn grub for your corny needs! Your order's on its way and should be arriving soon! ;)</p>
+      </div>
+    `;
+    const mailOptions = {
+      from: "corngrub42069@gmail.com",
+      to: req.user.email,
+      subject: "Your Order's On Its Way!",
+      html: html
+    };
+    const [isErr, message] = await sendMail(mailOptions)
+    if (isErr) {
+      return resp.json(400).json({
+        error: message
+      });      
+    }
+    console.log(message);   
+
+    return resp.json({
+      success: true
+    });
+  } catch (err) {
+    console.log("Error in processing order");
     console.log(err);
     return resp.status(500).send(err.message);
   }

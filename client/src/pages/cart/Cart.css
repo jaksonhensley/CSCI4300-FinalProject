@@ -36,28 +36,31 @@
 }
 
 .cart-heading {
-  font-size: 75px;
+  font-size: 32px;
   font-family: ‘Open Sans’;
   font-weight: 700;
   color: white;
+  margin-left: 3px;
+  margin-right: 3px;
 }
 
 .item-title {
   font-weight: bold;
-  font-size: 36px;
+  font-size: 18px;
 }
 
 .item-type {
+  font-size: 16px;
   font-style: italic;
 }
 
 .item-btn {
-  width: 70px;
-	height: 80px;
+  width: 60px;
+	height: 60px;
 	border-radius: 50%;	
 	justify-content: center;
 	align-items: center;
-	font-size: 30px;
+	font-size: 14px;
 	font-family: 'Open Sans';
 	font-weight: 900;
 	color: black;
@@ -93,19 +96,47 @@
 }
 
 .remove-btn-container {
-	margin-top: 10px;
-  margin-bottom: 10px;
+	margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+.remove-item {
+  font-size: 24px;
 }
 
 .confirm-order-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 50px;
+  margin-bottom: 10px;
 }
 
 .confirm-order {
   font-weight: bold;
-  font-size: 35px;
+  font-size: 24px;
+}
+
+.remove-all-container {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.remove-all-button {
+  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.remove-all {
+  font-size: 16px;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.total-cost {
+  margin-right: 15px;
 }
 
 @media screen and (max-width: 1000px) {
@@ -124,7 +155,7 @@
   }
 
   .item {
-    height: 500px;
+    height: 300px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -133,6 +164,17 @@
   .price {
 	  height: 100%;
   	text-align: center;
+  }
+
+  .remove-all-container {  
+    justify-content: center;
+    align-items: center;
+  }
+
+  .remove-all-button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 0;
   }
 
 }
