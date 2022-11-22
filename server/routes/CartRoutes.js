@@ -57,24 +57,31 @@ router.post("/new", requiresAuth, async (req, resp) => {
 // @access   Private
 router.put("/:id", requiresAuth, async (req, resp) => {
   try {
+    // delta val is required
     if (!req.body.delta) {
       return resp.status(404).json({
         error: "No delta specified in request body"
       });
     }    
+
+    // find cart item
     const cartItem = await CartItem.findOne({
       userId: req.user._id,
-      _id: req.body.itemId
+      _id: req.body.id
     });    
     if (!cartItem) {
       return resp.status(404).json({
         error: "Could not find cart item"
       });
     }
-    const newCount = cartItem.count + req.body.delta;
+
+    // make sure to convert delta to int! (put + sign at head of var)
+    const newCount = cartItem.count + +req.body.delta;
+
+    // update cart item with new count val
     const updatedCartItem = await CartItem.findOneAndUpdate({
       userId: req.user._id,
-      _id: req.body.itemId
+      _id: req.body.id
     }, {
       count: newCount
     }, {
@@ -103,7 +110,7 @@ router.delete("/:id", requiresAuth, async (req, resp) => {
     }
     await CartItem.findOneAndDelete({
       user: req.user._id,
-      _id: req.body.itemId
+      _id: req.body.id
     });
     return resp.json({
       success: true
