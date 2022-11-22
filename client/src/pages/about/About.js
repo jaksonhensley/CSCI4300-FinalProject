@@ -21,7 +21,7 @@ const About = () => {
         <div>
           <ul className="team-list">
             <li>John Lavender</li>
-            <li>Jakson Henley</li>
+            <li>Jakson Hensley</li>
             <li>Jacob Kossler</li>
           </ul>
         </div>      
