@@ -25,11 +25,6 @@ const Home = () => {
       title: "Shepherd's Pie",
       img: "Shepherd's-Pie.jpg",
       caption: "Damn, now I'm hungry!"
-    },
-    {      
-      title: "Regrets?",
-      img: "Meme.png",
-      caption: "The cream corn is suspiciously sweet. Don't think about it, just enjoy."
     }
   ];
 
