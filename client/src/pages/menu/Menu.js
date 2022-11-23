@@ -112,7 +112,7 @@ const Menu = () => {
     return (      
       <tr key={item._id}>
         <td className="cell">
-          <span className="item-title">{item.itemName + " - $" + item.itemPrice}</span>
+          <p className="menu-item-title">{item.itemName + " - $" + item.itemPrice}</p>
           <img className="item-img" src={item.imgSrc} alt=""/>
           <div>
             {
@@ -128,7 +128,7 @@ const Menu = () => {
               <div className="item-action">
                 <button 
                   onClick={() => handleAddItemToCart(item._id)}
-                  className="add-to-cart">
+                  className="button-primary button-primary-green">
                     <span>Add to Cart</span>
                 </button>
               </div>

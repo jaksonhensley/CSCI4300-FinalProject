@@ -11,7 +11,7 @@ const Reviews = () => {
   const [item, setItem] = useState({});
   const [reviews, setReviews] = useState([]);
   const [errors, setErrors] = useState([]);
-  const [userHasReviewed, setUserHasReviewed] = useState(false);
+  const [reviewByUser, setReviewByUser] = useState(undefined);
   const { itemId } = useParams();
   const navigate = useNavigate();
 
@@ -54,13 +54,14 @@ const Reviews = () => {
 
   // update if user has reviewed this item
   useEffect(() => {
+    setReviewByUser(undefined);
     if (user && reviews) {
-      const hasReviewed = reviews.some((review) => review.userId === user._id);
-      setUserHasReviewed(hasReviewed);
-    } else {
-      setUserHasReviewed(false);
-    }
-  }, [reviews, user, userHasReviewed]);
+      const foundReviewByUser = reviews.find((review) => review.userId === user._id);
+      if (foundReviewByUser) {
+        setReviewByUser(foundReviewByUser._id);
+      }
+    } 
+  }, [reviews, user, setReviewByUser]);
 
   // rendered reviews
   const renderedReviews = reviews.map((review) => {
@@ -85,24 +86,37 @@ const Reviews = () => {
 
   return (
     <div className="review-body">
+      <button 
+        className="button-primary button-primary-green"
+        onClick={() => navigate("/menu")}>
+          Return to Menu
+      </button>
+      <hr/>
       <div className="item-div">
         <span className="item-title">{item.itemName}</span>
         <img className="item-img" src={item.imgSrc} alt=""/>         
       </div>
       <h1 className="review-heading">Reviews</h1>
       {
-        user &&
+        user && !reviewByUser &&
         <button
           className="button-primary button-primary-green"
           onClick={() => navigate(`/write-review/${itemId}`)}>
             Write review
         </button>
       }
+      {
+        user && reviewByUser &&
+        <span className="already-reviewed-notice">
+          You've already review this item
+        </span>
+      }
       <table className="review-table">        
         <tbody>
           {renderedReviews}
         </tbody>
       </table>
+      <hr/>
     </div>
   );
 

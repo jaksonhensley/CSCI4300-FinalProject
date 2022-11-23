@@ -66,7 +66,8 @@
   margin: 5px 0;
 }
 
-.item-title {
+.menu-item-title {
+  font-size: 24px;
   color: white;
   text-align: center;
 }

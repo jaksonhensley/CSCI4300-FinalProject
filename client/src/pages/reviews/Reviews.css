@@ -3,6 +3,7 @@
   margin: auto;
   color: white;
   margin-top: 20px;
+  margin-bottom: 35px;
   width: 80%;   
 }
 
@@ -14,7 +15,7 @@
 
 .item-title {
   margin-right: 20px;
-  font-size: 36px;
+  font-size: 64px;
   margin-bottom: auto;
   font-weight: bold;
 }
@@ -72,6 +73,11 @@
   color: red;
   font-size: 52px;
   font-style: italic;
+}
+
+.already-reviewed-notice {
+  font-size: 24px;
+  background-color: gray;
 }
 
 .circle {

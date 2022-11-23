@@ -17,7 +17,7 @@
 
 .button-primary {
   padding: 15px 32px;
-  font-size: 30px;
+  font-size: 20px;
   border-radius: 12px;
   color: white;
   width: fit-content;
@@ -38,12 +38,16 @@
   background-color: red;
 }
 
+.button-primary-grey {
+  background-color: gray;
+}
+
 .button-primary-green:hover {
   border-color: purple;
   background-color: lightgreen;
 }
 
-.button-primary-red {
+.button-primary-red:hover {
   border-color: orange;
   background-color: crimson;
 }
