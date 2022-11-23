@@ -1,0 +1,21 @@
+.review-form-container {
+  margin: auto;
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+  text-align: left;
+}
+
+.white-text {
+  color: white;
+}
+
+.review-form-label {  
+  margin-right: 20px;
+  font-size: 24px;
+}
+
+.text-length {
+  font-size: 16px;    
+}

@@ -9,6 +9,7 @@ const { sendMail } = require("../mailer/Mailer");
 const { getRandomStr } = require("../const/Funcs");
 const { validatePasswordInput } = require("../validation/PasswordValidation");
 const { isEmpty } = require("../validation/isEmpty");
+const { requiresAuth } = require("../middleware/Permissions");
 
 // @route     POST /api/pwd/request-reset-password
 // @desc      User submits request to reset password
@@ -148,8 +149,77 @@ router.post("/reset-pwd", async (req, resp) => {
       <div>
         <h1>YOUR PASSWORD WAS SUCCESSFULLY CHANGED!</h1>
         <p>Your password has been changed successfully!</p>
-        <p>All previous password reset links are now invalidated.</p>
-        <p>If you wish to reset your password again, you will need to make a new request and receive a new link.</p>
+        <p>All previous password reset links you may have requested are now invalidated.</p>
+      </div>
+    `;
+    const mailOptions = {
+      from: "corngrub42069@gmail.com",
+      to: updatedUser.email,
+      subject: "Password Successfully Changed",
+      html: html
+    };
+    const [isErr, message] = sendMail(mailOptions)
+    console.log(message);  
+    if (isErr) {      
+      return resp.json(400).json({
+        error: message
+      });      
+    }
+
+    // return user json obj without password
+    console.log("Return user json obj without password");   
+    const userToReturn = { ...updatedUser._doc };
+    delete userToReturn.password;
+    return resp.json(userToReturn);
+  } catch (err) {
+    console.log(err);
+    return resp.status(500).send(err.message);
+  }
+});
+
+// @route     POST /api/pwd/do-reset-password
+// @desc      Submit password reset form
+// @access    Public
+router.post("/reset-pwd-logged-in", requiresAuth, async (req, resp) => {
+  try {
+    console.log("Resetting password while logged in");   
+
+    // validate password input
+    let errs = {};
+    validatePasswordInput(req.body, errs);
+    if (!isEmpty(errs)) {
+      console.log(errs);
+      return resp.status(400).json(errs);
+    }
+
+    // hash the new password
+    const hashedPassword = await bcrypt.hash(req.body.password, 12);
+    // fetch user by id and update password
+    const updatedUser = await User.findByIdAndUpdate(req.user._id, {
+      password: hashedPassword
+    }, {
+      new: true
+    });
+    // if no updated user, then fail with error
+    if (!updatedUser) {
+      console.log("No user found with id " + req.user._id);
+      return resp.status(400).json({
+        error: "No user found with id " + req.user._id
+      });
+    }
+
+    // delete all pwd reset tokens associated with user
+    console.log("Deleting all pwd reset tokens with userId " + req.user._id);
+    await PwdResetToken.deleteMany({
+      userId: req.user._id
+    });
+
+    // Email user confirming successful password reset
+    const html = `
+      <div>
+        <h1>YOUR PASSWORD WAS SUCCESSFULLY CHANGED!</h1>
+        <p>Your password has been changed successfully!</p>
+        <p>All previous password reset links you may have requested are now invalidated.</p>
       </div>
     `;
     const mailOptions = {

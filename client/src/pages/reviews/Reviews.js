@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useGlobalContext } from "../../shared/context/GlobalContext";
 import axios from "axios";
 
@@ -12,8 +12,18 @@ const Reviews = () => {
   const [reviews, setReviews] = useState([]);
   const [errors, setErrors] = useState([]);
   const [reviewByUser, setReviewByUser] = useState(undefined);
+  const [success, setSuccess] = useState(undefined);
   const { itemId } = useParams();
   const navigate = useNavigate();
+
+  // set success if present
+  const { state } = useLocation();
+  if (state) {
+    const { success } = state;
+    if (success) {
+      setSuccess(success);
+    }
+  } 
 
   // update reviews state when item id param is loaded (i.e., when component is mounted)
   useEffect(() => {
@@ -86,12 +96,20 @@ const Reviews = () => {
 
   return (
     <div className="review-body">
-      <button 
-        className="button-primary button-primary-green"
-        onClick={() => navigate("/menu")}>
-          Return to Menu
-      </button>
-      <hr/>
+      {
+        success && 
+        <div>
+          <p>{success}</p>
+        </div>
+      }
+      <div>
+        <button 
+          className="button-primary button-primary-green"
+          onClick={() => navigate("/menu")}>
+            Return to Menu
+        </button>
+        <hr/>
+      </div>
       <div className="item-div">
         <span className="item-title">{item.itemName}</span>
         <img className="item-img" src={item.imgSrc} alt=""/>         

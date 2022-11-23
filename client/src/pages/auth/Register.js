@@ -14,6 +14,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // navigate to account page if already logged in
   useEffect(() => {
     if (user && navigate) {
       console.log("User logged in, redirect to account");
@@ -21,26 +22,28 @@ const Register = () => {
     }
   }, [user, navigate]);
 
+  // submit registration form
   const handleSubmit = async (e) => {
     e.preventDefault();  
     setLoading(true);      
     console.log("Email: " + email);
     console.log("Password: " + password);
     console.log("Confirm password: " + confirmPassword);
+   
     await axios.post("/api/auth/register", {
       email,
       password,
       confirmPassword
     })
     .then(() => {
-      let message = "An email has been sent to " + email + " with steps that must be completed before you may login.";
       navigate("/success", {
         state: {
-          message: message
+          message: `An email has been sent to ${email} with steps that must be completed before you may login.`
         }
       });
     })
     .catch((err) => {
+      console.log(err);
       setLoading(false);
       if (err?.response?.data) {
         setErrors(err.response.data);

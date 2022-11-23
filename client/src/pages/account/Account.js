@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../../shared/context/GlobalContext";
-import { Table, Button } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 
 import "./Account.css";
 import "../../shared/style/common.css";
@@ -32,10 +32,14 @@ const Account = () => {
   return (  
     <div className="account-tables-container">
       <Table bordered striped>
-        <tbody className="profile-text">
+        <tbody>
           <tr>
-            <td>Email:</td>
-            <td>{user.email}</td>
+            <td>
+              <span className="profile-text">Email:</span>
+            </td>
+            <td>
+              <span className="profile-text">{user.email}</span>
+            </td>
           </tr>
         </tbody>
       </Table>
@@ -48,15 +52,19 @@ const Account = () => {
         <tbody>
           <tr>          
             <td>
-              <Button to="/request-reset-pwd">
-                Reset Password
-              </Button>  
+              <button 
+                className="button-primary button-primary-red"
+                onClick={() => navigate("/reset-pwd")}>
+                  Reset Password
+              </button>  
             </td>    
           </tr>      
           <tr>
             <td>
-              <button onClick={handleLogout}>
-                Logout
+              <button 
+                className="button-primary button-primary-red"
+                onClick={handleLogout}>
+                  Logout
               </button>
             </td>
           </tr>    

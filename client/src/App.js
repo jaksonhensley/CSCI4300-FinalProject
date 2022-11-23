@@ -17,6 +17,7 @@ import ResetPwd from "./pages/reset-pwd/ResetPwd";
 import Menu from "./pages/menu/Menu";
 import Cart from "./pages/cart/Cart";
 import Reviews from "./pages/reviews/Reviews";
+import WriteReview from "./pages/write-review/WriteReview";
 
 import NavBar from "./shared/components/nav/NavBar";
 import Loading from "./shared/components/loading/Loading";
@@ -26,7 +27,6 @@ import PrivateRoute from "./shared/components/PrivateRoute";
 
 import { GlobalProvider } from "./shared/context/GlobalContext";
 import { useGlobalContext } from "./shared/context/GlobalContext";
-import WriteReview from "./pages/reviews/WriteReview";
 
 const App = () => {  
   const routes = (
@@ -36,24 +36,28 @@ const App = () => {
         element={ 
           <Home/> 
         }
+        exact
       />
       <Route 
         path="/about" 
         element={ 
           <About/> 
         }
+        exact
       />
       <Route 
         path="/login" 
         element={ 
           <Login/> 
         }
+        exact
       />
       <Route 
         path="/register" 
         element={ 
           <Register/> 
         }
+        exact
       />     
       <Route 
         path="/validate/:userId" 
@@ -67,6 +71,14 @@ const App = () => {
         element={ 
           <RequestResetPwd/>
         }
+        exact
+      />
+      <Route
+        path="/reset-pwd"
+        element={
+          <ResetPwd/>
+        }
+        exact
       />
       <Route 
         path="/reset-pwd/:userId/:token" 
@@ -74,7 +86,7 @@ const App = () => {
           <ResetPwd/> 
         } 
         exact
-      />
+      />      
       <Route 
         path="/account" 
         element={ 
@@ -83,12 +95,14 @@ const App = () => {
               <Account/>
           </PrivateRoute>        
         }
+        exact
       />
       <Route 
         path="/menu" 
         element={
           <Menu/> 
         }
+        exact
       />
       <Route
         path="/reviews/:itemId"
@@ -105,6 +119,7 @@ const App = () => {
               <WriteReview/>
           </PrivateRoute>
         }
+        exact
       />
       <Route 
         path="/cart" 
@@ -114,18 +129,21 @@ const App = () => {
               <Cart/>
           </PrivateRoute>
         } 
+        exact
       />
       <Route
         path="/success"
         element={
           <Success/>        
         }
+        exact
       />
       <Route
         path="/error"
         element={
           <Error/>
         }
+        exact
       />
       <Route 
         path="*" 
@@ -134,7 +152,7 @@ const App = () => {
             to="/" 
             replace
           />
-        } 
+        }       
       />
     </Routes>
   );

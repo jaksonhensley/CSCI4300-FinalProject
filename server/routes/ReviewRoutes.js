@@ -39,16 +39,16 @@ router.post("/new", requiresAuth, async (req, resp) => {
     }
 
     // review text cannot be empty
-    if (isEmpty(req.body.text)) {
+    if (isEmpty(req.body.text) || req.body.text.length < 25) {
       return resp.status(400).json({
-        error: "Review text cannot be empty"
+        text: "Review text must be at least 25 characters long"
       });      
     }
 
     // review rating must be between 0 and 5 (inclusive)
     if (isEmpty(req.body.rating) || req.body.rating < 0 || req.body.rating > 5) {
       return resp.status(400).json({
-        error: "Rating is out of range for allowed numeric values"
+        rating: "Rating is out of range for allowed numeric values"
       });
     }
 
