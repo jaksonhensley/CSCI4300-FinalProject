@@ -7,12 +7,15 @@ import { CUISINE, SIDE, DRINK, DESSERT } from "./MenuSectionType";
 
 import "../../shared/style/common.css";
 import "./Menu.css";
+import { useNavigate } from "react-router-dom";
 
-const Menu = () => {
-  const { user } = useGlobalContext();
+const Menu = () => {  
   const [cart, setCart] = useState([]);
   const [items, setItems] = useState([]);
   const [currType, setCurrType] = useState(CUISINE);
+
+  const { user } = useGlobalContext();
+  const navigate = useNavigate();
 
   // for convenience, create array of menu section types
   const menuSectionTypes = [
@@ -114,23 +117,32 @@ const Menu = () => {
           <div>
             {
               !user && 
-                <span className="not-logged-in">Must be logged in to add cart item</span>
+              <span className="not-logged-in">Must be logged in to add cart item</span>
             }
             {
               user && cartContainsItem(item) &&
-                <span className="already-in-cart">Already in Cart</span>
+              <span className="already-in-cart">Already in Cart</span>
             }
             {
               user && !cartContainsItem(item) && 
-                <div className="item-action">
-                  <button 
-                    onClick={() => handleAddItemToCart(item._id)}
-                    className="add-to-cart">
-                      <span>Add to Cart</span>
-                  </button>
-                </div>
+              <div className="item-action">
+                <button 
+                  onClick={() => handleAddItemToCart(item._id)}
+                  className="add-to-cart">
+                    <span>Add to Cart</span>
+                </button>
+              </div>
             }    
           </div>  
+          <div>
+            <div className="item-action">
+              <button
+                onClick={() => navigate(`/reviews/${item._id}`)}
+                className="button-primary button-primary-green">
+                  Reviews
+              </button>
+            </div>
+          </div>
         </td>
       </tr>            
     );

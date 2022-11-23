@@ -6,7 +6,6 @@ const { Item } = require("../models/Item");
 // @desc     Get all items matching the type
 // @access   Public
 router.get("/:itemType?", async (req, resp) => {
-  // get requests do not contain body, so item type must be param
   try {    
     console.log("Get items route");
     console.log(req.params.itemType);
@@ -27,5 +26,28 @@ router.get("/:itemType?", async (req, resp) => {
     return resp.status(500).send(err.message);
   }
 });
+
+// @route     GET /items/one/:itemId 
+// @desc      Get item corresponding to item id
+// @access    Public
+router.get("/one/:itemId", async (req, resp) => {
+  try {
+    console.log("Get one item");
+    console.log(req.params.itemId);
+    // find item by id
+    const item = await Item.findById(req.params.itemId);
+    // if no item found, return error
+    if (!item) {
+      return resp.status(400).json({
+        error: "No item found"
+      });
+    }
+    // return item in json
+    return resp.json(item);
+  } catch (err) {
+    console.log(err);
+    return resp.status(500).send(err.message);
+  }
+})
 
 module.exports = router;

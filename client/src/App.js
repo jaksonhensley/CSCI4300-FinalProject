@@ -6,24 +6,27 @@ import {
   Navigate
 } from "react-router-dom";
 
-import NavBar from "./shared/components/nav/NavBar";
 import Home from "./pages/home/Home";
 import About from "./pages/about/About";
 import Account from "./pages/account/Account";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
+import ValidateReg from "./pages/auth/ValidateReg";
 import RequestResetPwd from "./pages/auth/RequestResetPwd";
 import ResetPwd from "./pages/reset-pwd/ResetPwd";
 import Menu from "./pages/menu/Menu";
 import Cart from "./pages/cart/Cart";
+import Reviews from "./pages/reviews/Reviews";
+
+import NavBar from "./shared/components/nav/NavBar";
 import Loading from "./shared/components/loading/Loading";
 import Success from "./shared/components/success/Success";
 import Error from "./shared/components/error/Error";
+import PrivateRoute from "./shared/components/PrivateRoute";
 
 import { GlobalProvider } from "./shared/context/GlobalContext";
 import { useGlobalContext } from "./shared/context/GlobalContext";
-import PrivateRoute from "./shared/components/PrivateRoute";
-import ValidateReg from "./pages/auth/ValidateReg";
+import WriteReview from "./pages/reviews/WriteReview";
 
 const App = () => {  
   const routes = (
@@ -51,7 +54,6 @@ const App = () => {
         element={ 
           <Register/> 
         }
-        exact
       />     
       <Route 
         path="/validate/:userId" 
@@ -86,6 +88,22 @@ const App = () => {
         path="/menu" 
         element={
           <Menu/> 
+        }
+      />
+      <Route
+        path="/reviews/:itemId"
+        element={
+          <Reviews/>
+        }
+        exact
+      />
+      <Route
+        path="/write-review/:itemId"
+        element={
+          <PrivateRoute
+            redirect={"/login"}>
+              <WriteReview/>
+          </PrivateRoute>
         }
       />
       <Route 
