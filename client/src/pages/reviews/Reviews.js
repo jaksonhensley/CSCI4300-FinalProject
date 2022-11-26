@@ -12,18 +12,8 @@ const Reviews = () => {
   const [reviews, setReviews] = useState([]);
   const [errors, setErrors] = useState([]);
   const [reviewByUser, setReviewByUser] = useState(undefined);
-  const [success, setSuccess] = useState(undefined);
   const { itemId } = useParams();
   const navigate = useNavigate();
-
-  // set success if present
-  const { state } = useLocation();
-  if (state) {
-    const { success } = state;
-    if (success) {
-      setSuccess(success);
-    }
-  } 
 
   // update reviews state when item id param is loaded (i.e., when component is mounted)
   useEffect(() => {
@@ -95,13 +85,7 @@ const Reviews = () => {
   });
 
   return (
-    <div className="review-body">
-      {
-        success && 
-        <div>
-          <p>{success}</p>
-        </div>
-      }
+    <div className="review-body">      
       <div>
         <button 
           className="button-primary button-primary-green"

@@ -19,3 +19,21 @@
 .text-length {
   font-size: 16px;    
 }
+
+.item-div {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.item-title {
+  margin-right: 20px;
+  font-size: 64px;
+  margin-bottom: auto;
+  font-weight: bold;
+}
+
+.item-img {
+  width: 400px;    
+  height: 300px;
+}

@@ -31,7 +31,17 @@ const Account = () => {
 
   return (  
     <div className="account-tables-container">
-      <Table bordered striped>
+      <span className="account">
+        Account
+      </span>
+      <Table>
+        <thead>
+          <tr>
+            <td>
+              <span className="table-title">Profile</span>
+            </td>        
+          </tr>
+        </thead>      
         <tbody>
           <tr>
             <td>
@@ -43,11 +53,13 @@ const Account = () => {
           </tr>
         </tbody>
       </Table>
-      <Table bordered striped>
+      <Table>
         <thead>
-          <th>
-            <span className="table-title">Actions</span>
-          </th>
+          <tr>
+            <td>
+              <span className="table-title">Actions</span>
+            </td>
+          </tr>
         </thead>
         <tbody>
           <tr>          

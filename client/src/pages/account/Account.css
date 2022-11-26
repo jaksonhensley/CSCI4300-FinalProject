@@ -1,3 +1,11 @@
+.account {
+  margin: auto;
+  font-size: 52px;
+  font-weight: bold;
+  font-style: italic;
+  color: orange;  
+}
+
 .account-tables-container {
   margin: auto;
   margin-top: 50px;

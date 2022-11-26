@@ -10,6 +10,7 @@ import { Table } from "react-bootstrap";
 const WriteReview = () => {
   const [text, setText] = useState("");
   const [rating, setRating] = useState(5);
+  const [item, setItem] = useState({});
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const { user } = useGlobalContext();
@@ -29,6 +30,19 @@ const WriteReview = () => {
       });
     }
   }, [user, navigate]);
+
+  // fetch item from db
+  useEffect(() => {
+    (async () => {
+      const { data } = await axios.get(`/api/items/one/${itemId}`);
+      console.log(data);
+      setItem(data);
+    })()
+    .catch((err) => {
+      console.log(err);
+      setErrors(err.response.data);
+    });
+  }, [itemId, errors]);
 
   // submit review form
   const handleSubmit = async (e) => {
@@ -62,6 +76,10 @@ const WriteReview = () => {
 
   return (
     <div className="review-form-container">
+      <div className="item-div">
+        <span className="item-title white-text">{item.itemName}</span>
+        <img className="item-img" src={item.imgSrc} alt=""/>         
+      </div>
       <form onSubmit={(e) => handleSubmit(e)}>
         <Table striped bordered>
           <tr>
