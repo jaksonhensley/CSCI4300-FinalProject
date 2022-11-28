@@ -7,6 +7,7 @@ const { User } = require("../models/User");
 const { Item } = require("../models/Item");
 const { CartItem }  = require("../models/CartItem");
 const { PwdResetToken } = require("../models/PwdResetToken");
+const { Review } = require("../models/Review");
 
 let database;
 if (process.env.ENV_TYPE === "test") {
@@ -93,14 +94,14 @@ const createSeedItems = async () => {
 
 const seedDB = async () => {
   const seedUsers = await createSeedUsers();
-  const seedItems = await createSeedItems();
-
+  const seedItems = await createSeedItems();  
   await PwdResetToken.deleteMany({});
-  await CartItem.deleteMany({});
+  await CartItem.deleteMany({});  
+  await Review.deleteMany({});
   await User.deleteMany({});
   await User.insertMany(seedUsers);
   await Item.deleteMany({});
-  await Item.insertMany(seedItems);
+  await Item.insertMany(seedItems);  
 };
 
 seedDB().then(() => {

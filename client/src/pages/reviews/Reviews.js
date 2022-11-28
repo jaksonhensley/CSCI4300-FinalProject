@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGlobalContext } from "../../shared/context/GlobalContext";
 import axios from "axios";
 
@@ -110,7 +110,7 @@ const Reviews = () => {
       {
         user && reviewByUser &&
         <span className="already-reviewed-notice">
-          You've already review this item
+          You've already reviewed this item
         </span>
       }
       <table className="review-table">        
