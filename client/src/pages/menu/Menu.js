@@ -128,7 +128,7 @@ const Menu = () => {
               <div className="item-action">
                 <button 
                   onClick={() => handleAddItemToCart(item._id)}
-                  className="button-primary button-primary-green">
+                  className="button-primary button-primary-orange">
                     <span>Add to Cart</span>
                 </button>
               </div>
