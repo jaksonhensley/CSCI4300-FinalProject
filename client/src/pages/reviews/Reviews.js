@@ -77,7 +77,7 @@ const Reviews = () => {
             <p>{review.text}</p>
           </td>          
           <td className="rating-cell circle">
-            <p className="rating">{review.rating}</p>
+            <p className="rating">{review.rating}/5</p>
           </td>
         </tr>        
       </React.Fragment>

@@ -30,10 +30,29 @@
   margin-right: 20px;
   font-size: 64px;
   margin-bottom: auto;
+  margin-top: auto;
   font-weight: bold;
 }
 
 .item-img {
   width: 400px;    
   height: 300px;
+}
+
+
+.submit {
+  margin-bottom: 20px;
+}
+
+
+@media screen and (max-width: 800px) {
+
+  .review-form-container {
+    width: 90%;
+  }
+
+  textarea{
+    width: 95%;
+  }
+
 }

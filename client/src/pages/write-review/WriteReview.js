@@ -135,7 +135,8 @@ const WriteReview = () => {
                   max="5"
                   value={rating}
                   onChange={(e) => setRating(e.target.value)}
-                />  
+                />
+                <span className="review-form-label white-text"> /5</span>  
                 {
                   errors.rating &&
                   <p className="red-text">
@@ -150,7 +151,7 @@ const WriteReview = () => {
           type="submit" 
           value="Submit" 
           disabled={loading}
-          className="button-primary button-primary-green"
+          className="button-primary button-primary-green submit"
         />         
       </form>
     </div>
