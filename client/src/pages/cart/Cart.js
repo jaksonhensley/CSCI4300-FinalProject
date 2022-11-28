@@ -183,7 +183,7 @@ const Cart = () => {
           <span className="item-title">{item.itemName}</span>
           <img className="item-img" src={item.imgSrc} alt=""/>
           <span className="item-type">{item.itemType}</span>
-          <Table striped bordered hover size="sm">
+          <Table hover size="sm">
             <tbody>
               <tr>
                 <td>
@@ -210,7 +210,7 @@ const Cart = () => {
               </tr>
             </tbody>
           </Table>           
-          <span className="item-title">${totalCost}</span>
+          <span className="item-cost">${totalCost}</span>
           <div className="remove-btn-container">
             <button 
               disabled={loading}
@@ -241,7 +241,7 @@ const Cart = () => {
           }
         </div>
         <div className="cart-table-container">       
-          <Table striped bordered hover>
+          <Table hover>
             <thead>
               <tr>
                 <th className="text-center cart-heading">Shopping Cart</th>                                  
