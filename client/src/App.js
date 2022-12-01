@@ -112,14 +112,27 @@ const App = () => {
         exact
       />
       <Route
-        path="/write-review/:itemId"
+        path="/write-review/:id"
         element={
           <PrivateRoute
             redirect={"/login"}>
-              <WriteReview/>
+              <WriteReview
+                updating={false}
+              />
           </PrivateRoute>
         }
         exact
+      />
+      <Route 
+        path="/edit-review/:id"
+        element={
+          <PrivateRoute
+            redirect={"/login"}>
+              <WriteReview 
+                updating={true}
+              />
+          </PrivateRoute>
+        }
       />
       <Route 
         path="/cart" 

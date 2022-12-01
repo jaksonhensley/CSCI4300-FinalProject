@@ -1,0 +1,38 @@
+services:
+  client:
+    container_name: corngrub-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"    
+    networks:
+      - corngrub-net
+    depends_on:
+      - db
+  server: 
+    container_name: corngrub-server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports: 
+      - "5000:5000"
+    networks:
+      - corngrub-net
+    depends_on:
+      - db
+  db:
+    container_name: corngrub-db
+    volumes:
+      - mongo-data:/data/db
+    image: mongo:latest
+    networks:
+      - corngrub-net
+    ports:
+      - "27017:27017"  
+networks:
+  corngrub-net:
+    driver: bridge
+volumes:
+  mongo-data:
+    driver: local

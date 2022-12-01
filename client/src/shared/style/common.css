@@ -56,6 +56,11 @@
   background-color: crimson;
 }
 
+.button-padding {
+  margin: 10px;
+  padding: 10px;
+}
+
 .text-center {
   text-align: center;
   color: white;

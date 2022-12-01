@@ -9,6 +9,7 @@ const { validateRegisterInput } = require("../validation/RegisterValidation");
 const { sendMail } = require("../mailer/Mailer");
 const { addHoursToDate } = require("../const/Funcs");
 const { isEmpty } = require("../validation/isEmpty");
+const FRONTEND_HEADER = require("../const/FrontendHeader");
 
 const { User } = require("../models/User");
 
@@ -51,7 +52,7 @@ router.post("/register", async (req, resp) => {
     const newUserId = savedUser._id;
 
     // try to send email, return error if unsuccessful
-    const verLink = "localhost:3006/validate/" + newUserId;
+    const verLink = FRONTEND_HEADER + "/validate/" + newUserId;
     const html = `
       <div>
         <h1>REGISTRATION VERIFICATION</h1>

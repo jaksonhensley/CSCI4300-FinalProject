@@ -9,17 +9,8 @@ const { CartItem }  = require("../models/CartItem");
 const { PwdResetToken } = require("../models/PwdResetToken");
 const { Review } = require("../models/Review");
 
-let database;
-if (process.env.ENV_TYPE === "test") {
-  console.log("Connecting to test db");
-  database = process.env.DB_LOCAL;
-} else {
-  console.log("Connecting to prod db");
-  database = process.env.DB_URI;
-}
-
 mongoose
-  .connect(database, {
+  .connect(process.env.DB, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   }).then(() => {

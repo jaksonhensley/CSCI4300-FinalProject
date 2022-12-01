@@ -9,13 +9,31 @@ const { Review } = require("../models/Review");
 // @route     GET /api/reviews/:itemId
 // @desc      Get all reviews associated with the item
 // @access    Public
-router.get("/:itemId", async (req, resp) => {
+router.get("/get-all-by-itemId/:itemId", async (req, resp) => {
   try {
     // fetch review by item id
     const reviews = await Review.find({
       itemId: req.params.itemId
     });
     return resp.json(reviews);
+  } catch (err) {
+    console.log(err);
+    return resp.status(500).send(err.message);
+  }
+});
+
+// @route     GET /api/review/get-by-id/:id
+// @desc      Get an existing review by id
+// @access    Public
+router.get("/get-by-id/:id", async (req, resp) => {
+  try {
+    const review = await Review.findById(req.params.id);
+    if (!review) {
+      return resp.status(400).json({
+        error: "No review with that id exists"
+      });
+    }
+    return resp.json(review);
   } catch (err) {
     console.log(err);
     return resp.status(500).send(err.message);

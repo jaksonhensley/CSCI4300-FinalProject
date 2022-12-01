@@ -12,24 +12,28 @@ const Reviews = () => {
   const [reviews, setReviews] = useState([]);
   const [errors, setErrors] = useState([]);
   const [reviewByUser, setReviewByUser] = useState(undefined);
+  const [loading, setLoading] = useState(false);
   const { itemId } = useParams();
   const navigate = useNavigate();
 
   // update reviews state when item id param is loaded (i.e., when component is mounted)
   useEffect(() => {
-    setErrors([]);
-    let errors = [];
+    let errs = [];
+
+    // get reviews
     (async () => {
-      const { data } = await axios.get(`/api/reviews/${itemId}`);
+      const { data } = await axios.get(`/api/reviews/get-all-by-itemId/${itemId}`);
       console.log(data);
       setReviews(data);
     })()
     .catch((err) => {
       console.log(err);   
       if (err?.response?.data) {
-        errors = errors.concat(err.response.data);
+        errs = errs.concat(err.response.data);
       }
     });
+
+    // get item
     (async () => {
       const { data } = await axios.get(`/api/items/one/${itemId}`);
       console.log(data);
@@ -37,8 +41,12 @@ const Reviews = () => {
     })()
     .catch((err) => {
       console.log(err);
-      errors = errors.concat(err.response.data);
+      if (err?.response?.data) {
+        errs = errs.concat(err.response.data);
+      }
     });
+
+    setErrors(errs);
   }, [itemId]);
 
   // navigate to error page if there are errors
@@ -61,7 +69,34 @@ const Reviews = () => {
         setReviewByUser(foundReviewByUser._id);
       }
     } 
-  }, [reviews, user, setReviewByUser]);
+  }, [user, reviews]);
+
+  // return true if review is written by logged-in user, else false
+  const reviewIsByUser = (review) => {
+    if (!user) {
+      return false;
+    }
+    return review.userId === user._id;
+  };
+
+  // delete the review
+  const deleteReview = async (review) => {
+    setLoading(true);
+    try {
+      await axios.delete(`/api/reviews/${review._id}`);
+      navigate("/success", {
+        state: {
+          message: "Successfully deleted review"
+        }
+      });
+    } catch (err) {    
+      console.log(err);   
+      if (err?.response?.data) {
+        setErrors(err.response.data);
+      }
+      setLoading(false);
+    }
+  }
 
   // rendered reviews
   const renderedReviews = reviews.map((review) => {
@@ -79,7 +114,24 @@ const Reviews = () => {
           <td className="rating-cell circle">
             <p className="rating">{review.rating}/5</p>
           </td>
-        </tr>        
+          {
+            reviewIsByUser(review) &&
+            <td>
+              <button
+                className="button-primary button-primary-orange button-padding"
+                onClick={() => navigate(`/edit-review/${review._id}`)}
+                disabled={loading}>
+                  Edit review
+              </button>
+              <button 
+                className="button-primary button-primary-red button-padding"
+                onClick={() => deleteReview(review)}
+                disabled={loading}>
+                  Delete review
+              </button>
+            </td>
+          }          
+        </tr>                
       </React.Fragment>
     );
   });

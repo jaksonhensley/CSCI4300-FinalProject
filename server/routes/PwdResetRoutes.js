@@ -10,6 +10,7 @@ const { getRandomStr } = require("../const/Funcs");
 const { validatePasswordInput } = require("../validation/PasswordValidation");
 const { isEmpty } = require("../validation/isEmpty");
 const { requiresAuth } = require("../middleware/Permissions");
+const FRONTEND_HEADER = require("../const/FrontendHeader");
 
 // @route     POST /api/pwd/request-reset-password
 // @desc      User submits request to reset password
@@ -37,7 +38,7 @@ router.post("/request-reset-pwd", async (req, resp) => {
     const savedPwdResetToken = await pwdResetToken.save();
 
     // create link and mail it
-    const changePassLink = "localhost:3006/reset-pwd/"+ user._id + "/" + randomStr;
+    const changePassLink = FRONTEND_HEADER + "/reset-pwd/"+ user._id + "/" + randomStr;
     const html = `
       <div>
         <h1>CHANGE YOUR PASSWORD</h1>

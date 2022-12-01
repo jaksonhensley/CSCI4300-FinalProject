@@ -265,7 +265,7 @@ const Cart = () => {
           }
           {
           cart.length <= 0 &&
-            <h1>
+            <h1 className="red-text">
               CART IS EMPTY
             </h1>        
           }
