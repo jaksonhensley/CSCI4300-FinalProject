@@ -12,7 +12,7 @@
 ---
 ### ABOUT
 
-MERN (MongoDB, Express, React, NodeJS) full stack application built as final project for CSCI 4300 Web Programming. 
+MERN (MongoDB, Express, React, NodeJS) full stack application built as final project for CSCI 4300 Web Programming. Why is the project "corn" themed? Don't know, I guess we just (a) really love corn and (b) have a middle school sense of humor, lol. ;)
 
 ---
 
