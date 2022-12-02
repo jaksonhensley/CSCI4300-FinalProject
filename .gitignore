@@ -1,6 +1,7 @@
 .env
 .git
 .gitignore
+.vscode
 /.pnp
 .pnp.js
 /coverage
